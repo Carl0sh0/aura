@@ -82,11 +82,20 @@ export function ensureLocalEngine(modelId: string): Promise<MLCEngine> {
   setEntry(modelId, { status: 'loading', progress: 0, text: 'Starting…', error: undefined })
   const promise = import('@mlc-ai/web-llm')
     .then(({ CreateMLCEngine }) =>
-      CreateMLCEngine(modelId, {
-        initProgressCallback: (report) => {
-          setEntry(modelId, { progress: report.progress ?? 0, text: report.text || '' })
+      CreateMLCEngine(
+        modelId,
+        {
+          initProgressCallback: (report) => {
+            setEntry(modelId, { progress: report.progress ?? 0, text: report.text || '' })
+          },
         },
-      }),
+        // Some models (e.g. gemma3-1b) ship a base config with a positive
+        // sliding_window_size, which conflicts with the catalog's own
+        // context_window_size override — WebLLM requires exactly one of the two to
+        // be positive. Force sliding-window attention off so context_window_size is
+        // always the sole limit, regardless of what a given model's base config sets.
+        { sliding_window_size: -1 },
+      ),
     )
     .then(async (eng) => {
       engines.set(modelId, eng)
