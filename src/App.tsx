@@ -12,6 +12,8 @@ import Journal from './components/Journal'
 import Routines from './components/Routines'
 import Settings from './components/Settings'
 import CompanionOnboarding from './components/CompanionOnboarding'
+import GoogleSignInButton from './components/GoogleSignInButton'
+import { googleSignInAvailable } from './lib/auth'
 import { useName } from './lib/store'
 import { useSettings, useActivePack } from './lib/settings'
 import { ensureLocalEngine, isModelDownloaded, webgpuSupported } from './lib/localEngine'
@@ -69,6 +71,23 @@ export default function App() {
           <img src="/logo-mark.svg" alt="" className="mx-auto mb-5 h-16 w-16 animate-breathe" />
           <h1 className="font-display text-3xl text-ink">{t('welcome.title')}</h1>
           <p className="mt-2 text-sm text-muted">{t('welcome.desc')}</p>
+
+          {googleSignInAvailable() && (
+            <div className="mt-5">
+              <GoogleSignInButton
+                onSignedIn={(p) => {
+                  if (p.name) setName(p.name.split(' ')[0])
+                  setAsking(false)
+                }}
+              />
+              <div className="mt-4 flex items-center gap-3">
+                <div className="h-px flex-1 bg-ink/10" />
+                <span className="text-xs text-muted">{t('welcome.or')}</span>
+                <div className="h-px flex-1 bg-ink/10" />
+              </div>
+            </div>
+          )}
+
           <form
             onSubmit={(e) => {
               e.preventDefault()

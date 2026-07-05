@@ -53,6 +53,7 @@ const es: Dict = {
   'welcome.namePlaceholder': 'Tu nombre (o un apodo)',
   'welcome.begin': 'Comenzar',
   'welcome.skip': 'Omitir por ahora',
+  'welcome.or': 'o escribe tu nombre',
   'welcome.companion.title': 'Elige tu compañera',
   'welcome.companion.desc':
     'Aura funciona por completo en tu dispositivo. Antes de nada, elige quién te va a acompañar — puedes cambiarla luego cuando quieras.',
@@ -245,6 +246,7 @@ const en: Dict = {
   'welcome.namePlaceholder': 'Your name (or a nickname)',
   'welcome.begin': 'Begin',
   'welcome.skip': 'Skip for now',
+  'welcome.or': 'or type your name',
   'welcome.companion.title': 'Choose your companion',
   'welcome.companion.desc':
     "Aura runs entirely on your device. Before anything else, pick who'll be with you — you can change it later any time.",
@@ -437,6 +439,7 @@ const fr: Dict = {
   'welcome.namePlaceholder': 'Votre prénom (ou un surnom)',
   'welcome.begin': 'Commencer',
   'welcome.skip': 'Passer pour l’instant',
+  'welcome.or': 'ou écrivez votre prénom',
   'welcome.companion.title': 'Choisissez votre compagne',
   'welcome.companion.desc':
     "Aura fonctionne entièrement sur votre appareil. Avant tout, choisissez qui vous accompagnera — vous pourrez en changer plus tard.",
@@ -629,6 +632,7 @@ const pt: Dict = {
   'welcome.namePlaceholder': 'O teu nome (ou uma alcunha)',
   'welcome.begin': 'Começar',
   'welcome.skip': 'Saltar por agora',
+  'welcome.or': 'ou escreve o teu nome',
   'welcome.companion.title': 'Escolhe a tua companheira',
   'welcome.companion.desc':
     'O Aura funciona inteiramente no teu dispositivo. Antes de mais nada, escolhe quem te vai acompanhar — podes mudar mais tarde.',
@@ -820,6 +824,7 @@ const de: Dict = {
   'welcome.namePlaceholder': 'Dein Name (oder ein Spitzname)',
   'welcome.begin': 'Loslegen',
   'welcome.skip': 'Vorerst überspringen',
+  'welcome.or': 'oder gib deinen Namen ein',
   'welcome.companion.title': 'Wähle deine Begleiterin',
   'welcome.companion.desc':
     'Aura läuft vollständig auf deinem Gerät. Wähle zuerst, wer dich begleiten soll — du kannst das später jederzeit ändern.',

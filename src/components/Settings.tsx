@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   AlertTriangle,
   Check,
@@ -15,15 +15,8 @@ import {
 import { clearAllData, exportAllData, useSettings, type Settings as SettingsType } from '../lib/settings'
 import { speechSupported } from '../lib/speech'
 import { useName } from '../lib/store'
-import {
-  GOOGLE_CLIENT_ID,
-  decodeIdToken,
-  emailCaptureAvailable,
-  googleSignInAvailable,
-  loadGsi,
-  subscribeEmail,
-  useProfile,
-} from '../lib/auth'
+import { emailCaptureAvailable, googleSignInAvailable, subscribeEmail, useProfile } from '../lib/auth'
+import GoogleSignInButton from './GoogleSignInButton'
 import { LANG_LABELS, SUPPORTED_LANGS, useLang } from '../lib/i18n'
 import { CHARACTER_PACKS, DEFAULT_PACK_ID, type CharacterPack } from '../lib/characterPacks'
 import {
@@ -124,41 +117,11 @@ export function PackCard({
 
 function AccountCard() {
   const { t } = useLang()
-  const { profile, setProfile, signOut } = useProfile()
+  const { profile, signOut } = useProfile()
   const [name, setName] = useName()
-  const gsiRef = useRef<HTMLDivElement>(null)
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
   const [subscribeError, setSubscribeError] = useState(false)
-
-  useEffect(() => {
-    if (profile || !googleSignInAvailable() || !gsiRef.current) return
-    let cancelled = false
-    loadGsi()
-      .then(() => {
-        if (cancelled || !gsiRef.current) return
-        const google = (window as any).google
-        google?.accounts?.id?.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: (res: { credential: string }) => {
-            const p = decodeIdToken(res.credential)
-            if (p) {
-              setProfile(p)
-              if (!name && p.name) setName(p.name.split(' ')[0])
-            }
-          },
-        })
-        google?.accounts?.id?.renderButton(gsiRef.current, {
-          theme: 'outline',
-          size: 'large',
-          shape: 'pill',
-        })
-      })
-      .catch(() => {})
-    return () => {
-      cancelled = true
-    }
-  }, [profile, name, setName, setProfile])
 
   async function handleSubscribe(addr: string) {
     setSubscribeError(false)
@@ -193,7 +156,7 @@ function AccountCard() {
             </button>
           </div>
         ) : (
-          <div ref={gsiRef} className="flex justify-start" />
+          <GoogleSignInButton onSignedIn={(p) => !name && p.name && setName(p.name.split(' ')[0])} />
         ))}
 
       {emailCaptureAvailable() && (
