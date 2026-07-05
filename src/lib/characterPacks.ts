@@ -72,9 +72,9 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
 - Lean on structured tools — CBT reframes, small behavioral experiments, checklists,
   if-then plans — over open exploration. Suggest, never prescribe. Plain language, no jargon.
 - Still warm underneath the brevity: this is directness with care, not bluntness.`,
-    localModelId: 'Qwen3-1.7B-q4f16_1-MLC',
-    localModelLabel: 'Qwen3 (1.7B, on-device)',
-    vramHintGB: 2.0,
+    localModelId: 'Qwen2.5-1.5B-Instruct-q4f16_1-MLC',
+    localModelLabel: 'Qwen 2.5 (1.5B, on-device)',
+    vramHintGB: 1.6,
     lowResourceRequired: true,
     ttsVoiceHint: { preferNames: ['male', 'daniel', 'fred', 'david'], pitch: 0.95, rate: 1.05 },
   },

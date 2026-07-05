@@ -164,6 +164,17 @@ export function isLocalEngineReady(modelId: string) {
   return entries.get(modelId)?.status === 'ready'
 }
 
+// Defensive net against reasoning-style models (e.g. Qwen3) that emit a hidden
+// "<think>...</think>" block before the real reply — Aura's pack catalog avoids such
+// models deliberately, but this keeps any stray reasoning output from ever reaching the
+// user regardless of which model ends up backing a pack.
+function stripThink(text: string): string {
+  let out = text.replace(/<think>[\s\S]*?<\/think>/gi, '')
+  const openIdx = out.search(/<think>/i)
+  if (openIdx !== -1) out = out.slice(0, openIdx) // unterminated think block — drop the rest
+  return out.trim()
+}
+
 /** Interrupts an in-flight generation for the given model, if one is running (a "stop" action). */
 export async function interruptLocalGeneration(modelId: string): Promise<void> {
   const eng = engines.get(modelId)
@@ -195,11 +206,55 @@ export async function localChatStream(
   const stream = await eng.chat.completions.create({
     stream: true,
     messages: [{ role: 'system', content: system }, ...messages],
+    max_tokens: 700,
   })
+
+  // Streaming version of stripThink() — buffers just enough to detect and swallow a
+  // leading "<think>...</think>" block without ever forwarding it to onToken.
+  const THINK_OPEN = '<think'
+  const THINK_CLOSE = '</think>'
+  let buffer = ''
+  let mode: 'detecting' | 'thinking' | 'normal' = 'detecting'
 
   for await (const chunk of stream) {
     const delta = chunk.choices?.[0]?.delta?.content
-    if (delta) onToken(delta)
+    if (!delta) continue
+
+    if (mode === 'normal') {
+      onToken(delta)
+      continue
+    }
+
+    buffer += delta
+
+    if (mode === 'detecting') {
+      const trimmed = buffer.trimStart()
+      if (trimmed.length === 0) continue
+      if (trimmed.length < THINK_OPEN.length) {
+        if (THINK_OPEN.startsWith(trimmed)) continue // could still become "<think", keep waiting
+        mode = 'normal'
+        onToken(buffer)
+        buffer = ''
+        continue
+      }
+      if (trimmed.startsWith(THINK_OPEN)) {
+        mode = 'thinking'
+      } else {
+        mode = 'normal'
+        onToken(buffer)
+        buffer = ''
+        continue
+      }
+    }
+
+    if (mode === 'thinking') {
+      const closeIdx = buffer.indexOf(THINK_CLOSE)
+      if (closeIdx === -1) continue
+      const after = buffer.slice(closeIdx + THINK_CLOSE.length)
+      mode = 'normal'
+      buffer = ''
+      if (after) onToken(after)
+    }
   }
   return { crisis }
 }
@@ -220,8 +275,9 @@ export async function localReflect(
       { role: 'system', content: system },
       { role: 'user', content: `Mood: ${mood ?? 'unspecified'}\n\nJournal entry:\n${entry}` },
     ],
+    max_tokens: 300,
   })
-  const reflection = res.choices?.[0]?.message?.content || ''
+  const reflection = stripThink(res.choices?.[0]?.message?.content || '')
   return { reflection, crisis }
 }
 
@@ -280,7 +336,8 @@ export async function localRoutine(
         content: `Today I feel: ${mood || 'okay'}. I'd like to focus on: ${focus || 'feeling a bit steadier'}.`,
       },
     ],
+    max_tokens: 600,
   })
-  const text = res.choices?.[0]?.message?.content || '{}'
+  const text = stripThink(res.choices?.[0]?.message?.content || '{}')
   return parseRoutineJson(text, lang)
 }
