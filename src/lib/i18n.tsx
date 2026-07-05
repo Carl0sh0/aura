@@ -97,6 +97,7 @@ const es: Dict = {
   'chat.error': 'Estoy teniendo problemas para responder ahora mismo. Inténtalo de nuevo en un momento.',
   'chat.stop': 'Detener',
   'chat.downloadingModel': 'Descargando {{pack}}…',
+  'chat.regenerate': 'Generar de nuevo',
 
   'journal.title': 'Diario',
   'journal.subtitle':
@@ -246,6 +247,7 @@ const en: Dict = {
   'chat.error': "I'm having trouble responding just now. Please try again in a moment.",
   'chat.stop': 'Stop',
   'chat.downloadingModel': 'Downloading {{pack}}…',
+  'chat.regenerate': 'Regenerate',
 
   'journal.title': 'Journal',
   'journal.subtitle':
@@ -395,6 +397,7 @@ const fr: Dict = {
   'chat.error': "J'ai du mal à répondre pour le moment. Réessayez dans un instant.",
   'chat.stop': 'Arrêter',
   'chat.downloadingModel': 'Téléchargement de {{pack}}…',
+  'chat.regenerate': 'Régénérer',
 
   'journal.title': 'Journal',
   'journal.subtitle':
@@ -544,6 +547,7 @@ const pt: Dict = {
   'chat.error': 'Estou com dificuldade em responder agora. Tenta novamente daqui a pouco.',
   'chat.stop': 'Parar',
   'chat.downloadingModel': 'A transferir {{pack}}…',
+  'chat.regenerate': 'Gerar de novo',
 
   'journal.title': 'Diário',
   'journal.subtitle':
@@ -692,6 +696,7 @@ const de: Dict = {
   'chat.error': 'Ich habe gerade Schwierigkeiten zu antworten. Bitte versuch es gleich noch einmal.',
   'chat.stop': 'Stopp',
   'chat.downloadingModel': '{{pack}} wird heruntergeladen…',
+  'chat.regenerate': 'Neu generieren',
 
   'journal.title': 'Tagebuch',
   'journal.subtitle':

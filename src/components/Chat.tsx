@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Send, Loader2, Square } from 'lucide-react'
+import { Send, Loader2, Square, RefreshCw } from 'lucide-react'
 import { streamChat, stopGenerating } from '../lib/api'
 import { appendSpeech } from '../lib/speech'
 import { useSpeaker } from '../lib/tts'
@@ -46,11 +46,7 @@ export default function Chat() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages, busy])
 
-  async function send(text: string) {
-    const content = text.trim()
-    if (!content || busy) return
-    setInput('')
-    const next: ChatMessage[] = [...messages, { role: 'user', content }]
+  async function generate(next: ChatMessage[]) {
     setMessages([...next, { role: 'assistant', content: '' }])
     setBusy(true)
     stoppedRef.current = false
@@ -91,6 +87,26 @@ export default function Chat() {
     } finally {
       setBusy(false)
     }
+  }
+
+  async function send(text: string) {
+    const content = text.trim()
+    if (!content || busy) return
+    setInput('')
+    await generate([...messages, { role: 'user', content }])
+  }
+
+  // Drops the last (assistant) reply and asks the model again from the same point —
+  // useful since small on-device models occasionally give a weak or off-target answer.
+  async function regenerate() {
+    if (busy || messages.length === 0) return
+    const last = messages[messages.length - 1]
+    if (last.role !== 'assistant') return
+    const withoutLastReply = messages.slice(0, -1)
+    if (withoutLastReply.length === 0 || withoutLastReply[withoutLastReply.length - 1].role !== 'user') {
+      return
+    }
+    await generate(withoutLastReply)
   }
 
   function stop() {
@@ -170,11 +186,20 @@ export default function Chat() {
                     ))}
                 </div>
                 {m.role === 'assistant' && m.content && (
-                  <SpeakButton
-                    id={`chat-${i}`}
-                    text={m.content}
-                    className="mt-1 h-7 w-7"
-                  />
+                  <div className="mt-1 flex items-center gap-1">
+                    <SpeakButton id={`chat-${i}`} text={m.content} className="h-7 w-7" />
+                    {!busy && i === messages.length - 1 && (
+                      <button
+                        type="button"
+                        onClick={regenerate}
+                        aria-label={t('chat.regenerate')}
+                        title={t('chat.regenerate')}
+                        className="inline-grid h-7 w-7 place-items-center rounded-full text-muted transition hover:text-sagedeep"
+                      >
+                        <RefreshCw size={13} />
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             ))}
