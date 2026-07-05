@@ -4,6 +4,7 @@ import { streamChat, stopGenerating } from '../lib/api'
 import { appendSpeech } from '../lib/speech'
 import { useSpeaker } from '../lib/tts'
 import { useSettings, useActivePack, useActiveVoiceHint } from '../lib/settings'
+import { useLocalEngineState } from '../lib/localEngine'
 import { useLang } from '../lib/i18n'
 import MicButton from './MicButton'
 import SpeakButton from './SpeakButton'
@@ -27,6 +28,7 @@ export default function Chat() {
   const [crisis, setCrisis] = useState(false)
   const [settings] = useSettings()
   const pack = useActivePack()
+  const engineState = useLocalEngineState(pack.localModelId)
   const voiceHint = useActiveVoiceHint()
   const speaker = useSpeaker()
   const { t, lang } = useLang()
@@ -145,9 +147,27 @@ export default function Chat() {
                       : 'rounded-bl-lg bg-white/80 text-ink border border-ink/5'
                   }`}
                 >
-                  {m.content || (busy && i === messages.length - 1 ? (
-                    <Loader2 className="animate-spin text-sage" size={18} />
-                  ) : '')}
+                  {m.content ||
+                    (busy && i === messages.length - 1 ? (
+                      engineState.status === 'loading' ? (
+                        <div className="w-40">
+                          <div className="mb-1.5 flex items-center gap-2 text-xs text-ink/70">
+                            <Loader2 className="animate-spin text-sage" size={14} />
+                            {t('chat.downloadingModel', { pack: t(pack.nameKey) })}
+                          </div>
+                          <div className="h-1.5 overflow-hidden rounded-full bg-ink/10">
+                            <div
+                              className="h-full rounded-full bg-sage transition-all"
+                              style={{ width: `${Math.round(engineState.progress * 100)}%` }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <Loader2 className="animate-spin text-sage" size={18} />
+                      )
+                    ) : (
+                      ''
+                    ))}
                 </div>
                 {m.role === 'assistant' && m.content && (
                   <SpeakButton
