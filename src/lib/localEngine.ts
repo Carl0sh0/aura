@@ -173,10 +173,37 @@ export function isLocalEngineReady(modelId: string) {
   return entries.get(modelId)?.status === 'ready'
 }
 
-// Defensive net against reasoning-style models (e.g. Qwen3) that emit a hidden
-// "<think>...</think>" block before the real reply — Aura's pack catalog avoids such
-// models deliberately, but this keeps any stray reasoning output from ever reaching the
-// user regardless of which model ends up backing a pack.
+// Model ids that earlier Aura versions shipped in the pack catalog. Their cached
+// weights are multi-GB, so leaving them behind after a model upgrade would quietly
+// waste a phone's storage — purge them once at startup instead.
+const RETIRED_MODEL_IDS = [
+  'gemma3-1b-it-q4f16_1-MLC',
+  'Qwen3-1.7B-q4f16_1-MLC',
+  'Qwen2.5-1.5B-Instruct-q4f16_1-MLC',
+  'Qwen2.5-3B-Instruct-q4f16_1-MLC',
+]
+
+/** Deletes cached weights of models Aura no longer uses. Safe to call every startup; no-op when nothing is cached. */
+export async function purgeRetiredModelCaches(): Promise<void> {
+  try {
+    const { hasModelInCache, deleteModelAllInfoInCache } = await import('@mlc-ai/web-llm')
+    for (const id of RETIRED_MODEL_IDS) {
+      try {
+        if (await hasModelInCache(id)) await deleteModelAllInfoInCache(id)
+      } catch {
+        // best-effort per model
+      }
+    }
+  } catch {
+    // best-effort
+  }
+}
+
+// Defensive net against hybrid-reasoning models (e.g. Qwen3/3.5) that emit a hidden
+// "<think>...</think>" block before the real reply. Aura disables thinking explicitly
+// via `extra_body: { enable_thinking: false }` on every generation call — thinking
+// tokens would silently eat the max_tokens budget and add latency on phones — but this
+// keeps any stray reasoning output from ever reaching the user if a model ignores it.
 function stripThink(text: string): string {
   let out = text.replace(/<think>[\s\S]*?<\/think>/gi, '')
   const openIdx = out.search(/<think>/i)
@@ -229,6 +256,8 @@ export async function localChatStream(
     temperature: 0.7,
     top_p: 0.9,
     repetition_penalty: 1.1,
+    // Hybrid-reasoning models (Qwen3.5): reply directly, no hidden <think> preamble.
+    extra_body: { enable_thinking: false },
   })
 
   // Streaming version of stripThink() — buffers just enough to detect and swallow a
@@ -301,6 +330,7 @@ export async function localReflect(
     temperature: 0.7,
     top_p: 0.9,
     repetition_penalty: 1.1,
+    extra_body: { enable_thinking: false },
   })
   const reflection = stripThink(res.choices?.[0]?.message?.content || '')
   return { reflection, crisis }
@@ -366,6 +396,7 @@ export async function localRoutine(
     temperature: 0.4,
     top_p: 0.9,
     repetition_penalty: 1.1,
+    extra_body: { enable_thinking: false },
   })
   const text = stripThink(res.choices?.[0]?.message?.content || '{}')
   return parseRoutineJson(text, lang)

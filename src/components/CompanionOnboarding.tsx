@@ -28,7 +28,6 @@ export default function CompanionOnboarding({ onDone }: { onDone: () => void }) 
     const id = setTimeout(() => setStep('pick'), SPLASH_MS)
     return () => clearTimeout(id)
   }, [step])
-
   // Download finished → into the app.
   useEffect(() => {
     if (step === 'download' && engineState.status === 'ready') onDone()
