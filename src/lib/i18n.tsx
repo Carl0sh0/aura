@@ -150,6 +150,17 @@ const es: Dict = {
   'settings.packs.removeDownload': 'Eliminar descarga',
   'settings.packs.hardwareWarning':
     'Tu dispositivo podría tener poca memoria para la IA local — el modo nube suele ir más fluido.',
+  'settings.account.title': 'Cuenta (opcional)',
+  'settings.account.desc':
+    'Aura funciona igual sin cuenta. Iniciar sesión solo guarda tu nombre y correo en este dispositivo.',
+  'settings.account.signOut': 'Cerrar sesión',
+  'settings.account.updates': '¿Quieres enterarte de las novedades de Aura de vez en cuando?',
+  'settings.account.emailPlaceholder': 'tu@correo.com',
+  'settings.account.subscribe': 'Avisarme',
+  'settings.account.subscribed': 'Listo — te avisaremos de las novedades.',
+  'settings.account.subscribeError': 'No se pudo guardar tu correo. Inténtalo de nuevo.',
+  'settings.account.privacyNote':
+    'Solo usaremos tu correo para novedades de Aura. Tus conversaciones y tu diario nunca salen de tu dispositivo.',
   'settings.toggle.voice.title': 'Entrada por voz',
   'settings.toggle.voice.desc.ok': 'Muestra un micrófono para hablar en lugar de escribir.',
   'settings.toggle.voice.desc.unsupported': 'No compatible con este navegador (prueba Chrome o Edge).',
@@ -300,6 +311,17 @@ const en: Dict = {
   'settings.packs.removeDownload': 'Remove download',
   'settings.packs.hardwareWarning':
     'Your device may be low on memory for on-device AI — cloud mode usually runs smoother.',
+  'settings.account.title': 'Account (optional)',
+  'settings.account.desc':
+    'Aura works the same without an account. Signing in only stores your name and email on this device.',
+  'settings.account.signOut': 'Sign out',
+  'settings.account.updates': 'Want to hear about Aura updates once in a while?',
+  'settings.account.emailPlaceholder': 'you@email.com',
+  'settings.account.subscribe': 'Keep me posted',
+  'settings.account.subscribed': "Done — we'll let you know what's new.",
+  'settings.account.subscribeError': "Couldn't save your email. Please try again.",
+  'settings.account.privacyNote':
+    'We only use your email for Aura updates. Your conversations and journal never leave your device.',
   'settings.toggle.voice.title': 'Voice input',
   'settings.toggle.voice.desc.ok': 'Show a microphone to speak instead of typing.',
   'settings.toggle.voice.desc.unsupported': 'Not supported in this browser (try Chrome or Edge).',
@@ -450,6 +472,17 @@ const fr: Dict = {
   'settings.packs.removeDownload': 'Supprimer le téléchargement',
   'settings.packs.hardwareWarning':
     "Votre appareil pourrait manquer de mémoire pour l'IA locale — le mode cloud est souvent plus fluide.",
+  'settings.account.title': 'Compte (facultatif)',
+  'settings.account.desc':
+    "Aura fonctionne pareil sans compte. La connexion n'enregistre que votre nom et votre e-mail sur cet appareil.",
+  'settings.account.signOut': 'Se déconnecter',
+  'settings.account.updates': "Envie de recevoir des nouvelles d'Aura de temps en temps ?",
+  'settings.account.emailPlaceholder': 'vous@email.com',
+  'settings.account.subscribe': 'Me prévenir',
+  'settings.account.subscribed': 'C’est noté — nous vous tiendrons au courant.',
+  'settings.account.subscribeError': "Impossible d'enregistrer votre e-mail. Réessayez.",
+  'settings.account.privacyNote':
+    "Votre e-mail ne sert qu'aux nouvelles d'Aura. Vos conversations et votre journal ne quittent jamais votre appareil.",
   'settings.toggle.voice.title': 'Saisie vocale',
   'settings.toggle.voice.desc.ok': "Afficher un micro pour parler au lieu d'écrire.",
   'settings.toggle.voice.desc.unsupported': 'Non pris en charge sur ce navigateur (essayez Chrome ou Edge).',
@@ -599,6 +632,17 @@ const pt: Dict = {
   'settings.packs.removeDownload': 'Remover transferência',
   'settings.packs.hardwareWarning':
     'O teu dispositivo pode ter pouca memória para IA local — o modo nuvem costuma ser mais fluido.',
+  'settings.account.title': 'Conta (opcional)',
+  'settings.account.desc':
+    'O Aura funciona igual sem conta. Iniciar sessão só guarda o teu nome e e-mail neste dispositivo.',
+  'settings.account.signOut': 'Terminar sessão',
+  'settings.account.updates': 'Queres saber das novidades do Aura de vez em quando?',
+  'settings.account.emailPlaceholder': 'tu@email.com',
+  'settings.account.subscribe': 'Avisar-me',
+  'settings.account.subscribed': 'Feito — vamos avisar-te das novidades.',
+  'settings.account.subscribeError': 'Não foi possível guardar o teu e-mail. Tenta novamente.',
+  'settings.account.privacyNote':
+    'Só usamos o teu e-mail para novidades do Aura. As tuas conversas e o teu diário nunca saem do teu dispositivo.',
   'settings.toggle.voice.title': 'Entrada por voz',
   'settings.toggle.voice.desc.ok': 'Mostra um microfone para falares em vez de escreveres.',
   'settings.toggle.voice.desc.unsupported': 'Não suportado neste navegador (experimenta Chrome ou Edge).',
@@ -748,6 +792,17 @@ const de: Dict = {
   'settings.packs.removeDownload': 'Download entfernen',
   'settings.packs.hardwareWarning':
     'Dein Gerät hat möglicherweise wenig Speicher für lokale KI — der Cloud-Modus läuft meist flüssiger.',
+  'settings.account.title': 'Konto (optional)',
+  'settings.account.desc':
+    'Aura funktioniert ohne Konto genauso. Die Anmeldung speichert nur Namen und E-Mail auf diesem Gerät.',
+  'settings.account.signOut': 'Abmelden',
+  'settings.account.updates': 'Möchtest du ab und zu Neuigkeiten von Aura erfahren?',
+  'settings.account.emailPlaceholder': 'du@email.com',
+  'settings.account.subscribe': 'Benachrichtige mich',
+  'settings.account.subscribed': 'Erledigt — wir melden uns bei Neuigkeiten.',
+  'settings.account.subscribeError': 'E-Mail konnte nicht gespeichert werden. Bitte erneut versuchen.',
+  'settings.account.privacyNote':
+    'Deine E-Mail nutzen wir nur für Aura-Neuigkeiten. Deine Gespräche und dein Tagebuch verlassen nie dein Gerät.',
   'settings.toggle.voice.title': 'Spracheingabe',
   'settings.toggle.voice.desc.ok': 'Zeigt ein Mikrofon, um zu sprechen statt zu tippen.',
   'settings.toggle.voice.desc.unsupported': 'In diesem Browser nicht unterstützt (probiere Chrome oder Edge).',

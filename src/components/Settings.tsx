@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   AlertTriangle,
   Check,
@@ -15,6 +15,15 @@ import {
 import { clearAllData, useSettings, type Settings as SettingsType } from '../lib/settings'
 import { speechSupported } from '../lib/speech'
 import { useName } from '../lib/store'
+import {
+  GOOGLE_CLIENT_ID,
+  decodeIdToken,
+  emailCaptureAvailable,
+  googleSignInAvailable,
+  loadGsi,
+  subscribeEmail,
+  useProfile,
+} from '../lib/auth'
 import { LANG_LABELS, SUPPORTED_LANGS, useLang } from '../lib/i18n'
 import { CHARACTER_PACKS, DEFAULT_PACK_ID, type CharacterPack } from '../lib/characterPacks'
 import {
@@ -110,6 +119,123 @@ export function PackCard({
         {pack.localModelLabel} — ~{pack.vramHintGB}GB
       </p>
     </button>
+  )
+}
+
+function AccountCard() {
+  const { t } = useLang()
+  const { profile, setProfile, signOut } = useProfile()
+  const [name, setName] = useName()
+  const gsiRef = useRef<HTMLDivElement>(null)
+  const [email, setEmail] = useState('')
+  const [subscribed, setSubscribed] = useState(false)
+  const [subscribeError, setSubscribeError] = useState(false)
+
+  useEffect(() => {
+    if (profile || !googleSignInAvailable() || !gsiRef.current) return
+    let cancelled = false
+    loadGsi()
+      .then(() => {
+        if (cancelled || !gsiRef.current) return
+        const google = (window as any).google
+        google?.accounts?.id?.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (res: { credential: string }) => {
+            const p = decodeIdToken(res.credential)
+            if (p) {
+              setProfile(p)
+              if (!name && p.name) setName(p.name.split(' ')[0])
+            }
+          },
+        })
+        google?.accounts?.id?.renderButton(gsiRef.current, {
+          theme: 'outline',
+          size: 'large',
+          shape: 'pill',
+        })
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [profile, name, setName, setProfile])
+
+  async function handleSubscribe(addr: string) {
+    setSubscribeError(false)
+    const ok = await subscribeEmail(addr.trim())
+    if (ok) setSubscribed(true)
+    else setSubscribeError(true)
+  }
+
+  // Nothing configured — render nothing rather than a broken card.
+  if (!googleSignInAvailable() && !emailCaptureAvailable()) return null
+
+  return (
+    <div className="card mt-4 p-5">
+      <p className="font-medium text-ink">{t('settings.account.title')}</p>
+      <p className="mb-3 text-sm text-muted">{t('settings.account.desc')}</p>
+
+      {googleSignInAvailable() &&
+        (profile ? (
+          <div className="flex items-center gap-3">
+            {profile.picture && (
+              <img src={profile.picture} alt="" className="h-10 w-10 rounded-full" />
+            )}
+            <div className="flex-1">
+              <p className="text-sm font-medium text-ink">{profile.name}</p>
+              <p className="text-xs text-muted">{profile.email}</p>
+            </div>
+            <button
+              onClick={signOut}
+              className="rounded-full border border-ink/10 px-4 py-2 text-xs font-medium text-muted transition hover:border-clay/40 hover:text-clay"
+            >
+              {t('settings.account.signOut')}
+            </button>
+          </div>
+        ) : (
+          <div ref={gsiRef} className="flex justify-start" />
+        ))}
+
+      {emailCaptureAvailable() && (
+        <div className="mt-4 border-t border-ink/8 pt-4">
+          {subscribed ? (
+            <p className="text-sm text-sagedeep">✓ {t('settings.account.subscribed')}</p>
+          ) : (
+            <>
+              <p className="mb-2 text-sm text-ink/85">{t('settings.account.updates')}</p>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  const addr = email || profile?.email || ''
+                  if (addr.trim()) handleSubscribe(addr)
+                }}
+                className="flex gap-2"
+              >
+                <input
+                  type="email"
+                  value={email || profile?.email || ''}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={t('settings.account.emailPlaceholder')}
+                  className="flex-1 rounded-full border border-ink/10 bg-white/60 px-4 py-2 text-sm text-ink outline-none transition focus:border-sage/50"
+                />
+                <button
+                  type="submit"
+                  className="rounded-full bg-sage px-4 py-2 text-xs font-medium text-white transition hover:opacity-90"
+                >
+                  {t('settings.account.subscribe')}
+                </button>
+              </form>
+              {subscribeError && (
+                <p className="mt-2 text-xs text-clay">{t('settings.account.subscribeError')}</p>
+              )}
+              <p className="mt-2 text-[11px] leading-relaxed text-muted/80">
+                {t('settings.account.privacyNote')}
+              </p>
+            </>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -330,6 +456,9 @@ export default function Settings() {
           <Toggle on={settings.reduceMotion} onChange={(v) => set({ reduceMotion: v })} />
         </Row>
       </div>
+
+      {/* Account (only renders when Google Sign-In / email updates are configured) */}
+      <AccountCard />
 
       {/* Privacy */}
       <div className="card mt-4 flex items-start gap-3 p-5">

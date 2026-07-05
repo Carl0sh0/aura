@@ -61,6 +61,7 @@ export function clearAllData() {
     'aura.diary',
     'aura.settings',
     'aura.lang',
+    'aura.profile',
   ].forEach((k) => localStorage.removeItem(k))
   location.reload()
 }
