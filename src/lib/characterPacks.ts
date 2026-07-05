@@ -34,6 +34,73 @@ export type CharacterPack = {
   ttsVoiceHint: VoiceHint
 }
 
+export type ModelOption = {
+  id: string
+  label: string
+  vramGB: number
+  lowResource: boolean
+  description: string
+}
+
+export const SUPPORTED_MODELS: ModelOption[] = [
+  {
+    id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',
+    label: 'Llama 3.2 (1B)',
+    vramGB: 1.1,
+    lowResource: true,
+    description: 'Ultra-fast, lowest memory footprint. Perfect for older phones or laptops.'
+  },
+  {
+    id: 'gemma3-1b-it-q4f16_1-MLC',
+    label: 'Gemma 3 (1B)',
+    vramGB: 1.2,
+    lowResource: true,
+    description: 'Google’s newest lightweight model. Great speed and solid alignment.'
+  },
+  {
+    id: 'Qwen3.5-2B-q4f16_1-MLC',
+    label: 'Qwen 3.5 (2B)',
+    vramGB: 2.2,
+    lowResource: false,
+    description: 'Alibaba’s state-of-the-art 2B model. Highly balanced intelligence and speed.'
+  },
+  {
+    id: 'gemma-2-2b-it-q4f16_1-MLC',
+    label: 'Gemma 2 (2B)',
+    vramGB: 2.4,
+    lowResource: false,
+    description: 'Highly capable 2.6B parameter model from Google.'
+  },
+  {
+    id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
+    label: 'Llama 3.2 (3B)',
+    vramGB: 2.8,
+    lowResource: false,
+    description: 'Meta’s highly aligned 3B model. Empathic and clear conversation.'
+  },
+  {
+    id: 'Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC',
+    label: 'Ministral 3 (3B)',
+    vramGB: 2.9,
+    lowResource: false,
+    description: 'Mistral’s premium on-device model, tailored for reasoning and depth.'
+  },
+  {
+    id: 'Phi-4-mini-instruct-q4f16_1-MLC',
+    label: 'Phi-4 Mini (3.8B)',
+    vramGB: 3.8,
+    lowResource: false,
+    description: 'Microsoft’s latest mini model. Incredible logic and problem-solving.'
+  },
+  {
+    id: 'Qwen3.5-4B-q4f16_1-MLC',
+    label: 'Qwen 3.5 (4B)',
+    vramGB: 3.9,
+    lowResource: false,
+    description: 'State-of-the-art 4B model. Extremely rich vocabulary and reasoning.'
+  }
+]
+
 export const DEFAULT_PACK_ID: PackId = 'calm'
 
 export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
@@ -55,7 +122,7 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
     localModelLabel: 'Qwen 3.5 (2B, on-device)',
     vramHintGB: 2.2,
     lowResourceRequired: false,
-    ttsVoiceHint: { preferNames: ['female', 'samantha', 'victoria', 'zira'], pitch: 1, rate: 0.98 },
+    ttsVoiceHint: { preferNames: ['female', 'sonia', 'libby', 'serena', 'samantha'], pitch: 1, rate: 0.98 },
   },
   grounded: {
     id: 'grounded',
@@ -76,7 +143,7 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
     localModelLabel: 'Qwen 3.5 (4B, on-device)',
     vramHintGB: 3.9,
     lowResourceRequired: false,
-    ttsVoiceHint: { preferNames: ['male', 'daniel', 'fred', 'david'], pitch: 0.95, rate: 1.05 },
+    ttsVoiceHint: { preferNames: ['male', 'ryan', 'oliver', 'daniel', 'george'], pitch: 0.95, rate: 1.05 },
   },
   reflective: {
     id: 'reflective',
@@ -97,6 +164,6 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
     localModelLabel: 'Ministral 3 (3B, on-device)',
     vramHintGB: 2.9,
     lowResourceRequired: true,
-    ttsVoiceHint: { preferNames: ['female', 'moira', 'tessa', 'karen'], pitch: 1.05, rate: 0.92 },
+    ttsVoiceHint: { preferNames: ['female', 'libby', 'siri', 'serena', 'moira'], pitch: 1.05, rate: 0.92 },
   },
 }

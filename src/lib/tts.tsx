@@ -60,12 +60,74 @@ export function SpeakerProvider({ children }: { children: ReactNode }) {
       // not every OS/browser exposes named voices), then fall back to any language match.
       const voices = window.speechSynthesis.getVoices()
       const base = u.lang.slice(0, 2).toLowerCase()
-      const byLang = voices.filter((v) => v.lang?.toLowerCase().startsWith(base))
-      const match =
-        (hint?.preferNames?.length &&
-          byLang.find((v) => hint.preferNames.some((n) => v.name.toLowerCase().includes(n.toLowerCase())))) ||
-        byLang[0]
-      if (match) u.voice = match
+
+      // If the target language is English ('en'), we prioritize British ('en-gb') voices
+      // to give that calm, therapeutic British accent the user requested.
+      const isEnglish = base === 'en'
+      let byLang = voices.filter((v) => {
+        const vl = v.lang.toLowerCase()
+        return isEnglish ? vl.startsWith('en-gb') : vl.startsWith(base)
+      })
+
+      // Fall back to general English ('en') if no en-GB voice is available
+      if (isEnglish && byLang.length === 0) {
+        byLang = voices.filter((v) => v.lang.toLowerCase().startsWith('en'))
+      }
+
+      // If no language-matched voice at all, default to any available voice
+      if (byLang.length === 0) {
+        byLang = voices
+      }
+
+      // Score and rank voices to pick the absolute highest quality one
+      let bestVoice = byLang[0]
+      let maxScore = -9999
+
+      for (const v of byLang) {
+        let score = 0
+        const nameLower = v.name.toLowerCase()
+
+        // 1. High-Quality/Neural voice boost
+        if (
+          nameLower.includes('natural') ||
+          nameLower.includes('neural') ||
+          nameLower.includes('online') ||
+          nameLower.includes('google') ||
+          nameLower.includes('enhanced') ||
+          nameLower.includes('siri') ||
+          nameLower.includes('premium')
+        ) {
+          score += 100
+        }
+
+        // 2. Legacy robotic voice penalty
+        if (
+          nameLower.includes('zira') ||
+          nameLower.includes('david') ||
+          nameLower.includes('desktop') ||
+          nameLower.includes('karen') ||
+          nameLower.includes('hazel') ||
+          nameLower.includes('harrier') ||
+          nameLower.includes('heera')
+        ) {
+          score -= 50
+        }
+
+        // 3. Companion hint preference match (specific names / gender hints)
+        if (hint?.preferNames?.length) {
+          const matchCount = hint.preferNames.filter((n) =>
+            nameLower.includes(n.toLowerCase())
+          ).length
+          score += matchCount * 20
+        }
+
+        if (score > maxScore) {
+          maxScore = score
+          bestVoice = v
+        }
+      }
+
+      if (bestVoice) u.voice = bestVoice
       const done = () => {
         if (activeRef.current === id) {
           activeRef.current = null

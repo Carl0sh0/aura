@@ -4,6 +4,7 @@ import type { ChatMessage, Habit } from './store'
 import type { Lang } from './prompts'
 import { interruptLocalGeneration, localChatStream, localReflect, localRoutine } from './localEngine'
 import { CHARACTER_PACKS, DEFAULT_PACK_ID, type CharacterPack } from './characterPacks'
+import { getModelIdForPack } from './settings'
 
 export type ChatResult = { crisis: boolean }
 
@@ -19,12 +20,14 @@ export async function streamChat(
   onToken: (t: string) => void,
   { lang, pack = CHARACTER_PACKS[DEFAULT_PACK_ID] }: StreamChatOptions = {},
 ): Promise<ChatResult> {
-  return localChatStream(messages, context, onToken, lang, pack.localModelId, pack.personaVoice)
+  const modelId = getModelIdForPack(pack.id)
+  return localChatStream(messages, context, onToken, lang, modelId, pack.personaVoice)
 }
 
 /** Stops an in-flight chat generation for the given pack's model (a "stop generating" action). */
 export function stopGenerating(pack: CharacterPack = CHARACTER_PACKS[DEFAULT_PACK_ID]): Promise<void> {
-  return interruptLocalGeneration(pack.localModelId)
+  const modelId = getModelIdForPack(pack.id)
+  return interruptLocalGeneration(modelId)
 }
 
 export async function reflect(
@@ -33,7 +36,8 @@ export async function reflect(
   lang?: Lang,
   pack: CharacterPack = CHARACTER_PACKS[DEFAULT_PACK_ID],
 ): Promise<{ reflection: string; crisis: boolean }> {
-  return localReflect(entry, mood, lang, pack.localModelId)
+  const modelId = getModelIdForPack(pack.id)
+  return localReflect(entry, mood, lang, modelId)
 }
 
 export async function generateRoutine(
@@ -42,5 +46,6 @@ export async function generateRoutine(
   lang?: Lang,
   pack: CharacterPack = CHARACTER_PACKS[DEFAULT_PACK_ID],
 ): Promise<{ intro: string; habits: Habit[] }> {
-  return localRoutine(mood, focus, lang, pack.localModelId)
+  const modelId = getModelIdForPack(pack.id)
+  return localRoutine(mood, focus, lang, modelId)
 }

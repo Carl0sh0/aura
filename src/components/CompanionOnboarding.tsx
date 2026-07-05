@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react'
-import { AlertTriangle, RefreshCw } from 'lucide-react'
+import { AlertTriangle, ArrowRight, RefreshCw } from 'lucide-react'
 import { CHARACTER_PACKS, DEFAULT_PACK_ID } from '../lib/characterPacks'
-import { useSettings, type Settings as SettingsType } from '../lib/settings'
+import { useSettings, useModelIdForPack, type Settings as SettingsType } from '../lib/settings'
 import { switchActiveLocalModel, useLocalEngineState, webgpuSupported } from '../lib/localEngine'
+import { useName } from '../lib/store'
+import { googleSignInAvailable } from '../lib/auth'
 import { useLang } from '../lib/i18n'
 import { PackCard } from './Settings'
+import GoogleSignInButton from './GoogleSignInButton'
 
 const PACK_LIST = Object.values(CHARACTER_PACKS)
 const SPLASH_MS = 4500
+const TIP_KEYS = ['welcome.tip.1', 'welcome.tip.2', 'welcome.tip.3', 'welcome.tip.4']
+const TIP_MS = 4000
 
 // First-run flow: a short branded splash → pick a companion (confirmed with
 // Continue) → a dedicated download screen with live progress. Everything Aura
@@ -15,10 +20,13 @@ const SPLASH_MS = 4500
 export default function CompanionOnboarding({ onDone }: { onDone: () => void }) {
   const { t } = useLang()
   const [settings, setSettings] = useSettings()
+  const [name, setName] = useName()
   const [step, setStep] = useState<'splash' | 'pick' | 'download'>('splash')
+  const [tipIdx, setTipIdx] = useState(0)
   const gpuOk = webgpuSupported()
   const activePack = CHARACTER_PACKS[settings.activePackId] ?? CHARACTER_PACKS[DEFAULT_PACK_ID]
-  const engineState = useLocalEngineState(activePack.localModelId)
+  const activeModelId = useModelIdForPack(activePack.id)
+  const engineState = useLocalEngineState(activeModelId)
 
   const set = (patch: Partial<SettingsType>) => setSettings((s) => ({ ...s, ...patch }))
 
@@ -32,6 +40,13 @@ export default function CompanionOnboarding({ onDone }: { onDone: () => void }) 
   useEffect(() => {
     if (step === 'download' && engineState.status === 'ready') onDone()
   }, [step, engineState.status, onDone])
+  // The download can take a while — cycle through a few things to read/do meanwhile
+  // instead of a dead progress bar (sign-in below is the main one).
+  useEffect(() => {
+    if (step !== 'download') return
+    const id = setInterval(() => setTipIdx((i) => (i + 1) % TIP_KEYS.length), TIP_MS)
+    return () => clearInterval(id)
+  }, [step])
 
   function handleContinue() {
     if (!gpuOk) {
@@ -39,7 +54,7 @@ export default function CompanionOnboarding({ onDone }: { onDone: () => void }) 
       return
     }
     setStep('download')
-    switchActiveLocalModel(activePack.localModelId).catch(() => {})
+    switchActiveLocalModel(activeModelId).catch(() => {})
   }
 
   if (step === 'splash') {
@@ -79,7 +94,7 @@ export default function CompanionOnboarding({ onDone }: { onDone: () => void }) 
                 {engineState.error || 'unknown error'}
               </p>
               <button
-                onClick={() => switchActiveLocalModel(activePack.localModelId).catch(() => {})}
+                onClick={() => switchActiveLocalModel(activeModelId).catch(() => {})}
                 className="mx-auto mt-4 inline-flex items-center gap-2 rounded-full bg-clay px-6 py-2.5 text-sm font-medium text-white transition hover:opacity-90"
               >
                 <RefreshCw size={14} /> {t('welcome.downloading.retry')}
@@ -98,6 +113,31 @@ export default function CompanionOnboarding({ onDone }: { onDone: () => void }) 
               </p>
             </div>
           )}
+
+          {/* Something to do while it downloads, instead of a dead wait. */}
+          <div className="mt-6 border-t border-ink/8 pt-5">
+            {googleSignInAvailable() && (
+              <>
+                <p className="mb-3 text-xs text-muted">{t('welcome.downloading.signin')}</p>
+                <GoogleSignInButton
+                  onSignedIn={(p) => {
+                    if (!name && p.name) setName(p.name.split(' ')[0])
+                  }}
+                />
+              </>
+            )}
+            <p key={tipIdx} className="mt-4 text-sm italic leading-relaxed text-ink/70 animate-rise">
+              {t(TIP_KEYS[tipIdx])}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onDone}
+            className="mt-5 inline-flex items-center gap-1.5 text-xs text-muted underline-offset-2 hover:underline"
+          >
+            {t('welcome.downloading.skip')} <ArrowRight size={12} />
+          </button>
         </div>
       </div>
     )

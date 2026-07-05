@@ -59,6 +59,12 @@ const es: Dict = {
   'welcome.downloading.title': 'Descargando a {{pack}}…',
   'welcome.downloading.sub': 'Solo la primera vez. Puede tardar unos minutos — deja la app abierta.',
   'welcome.downloading.retry': 'Reintentar',
+  'welcome.downloading.signin': 'Mientras se descarga, puedes iniciar sesión (opcional):',
+  'welcome.downloading.skip': 'Continuar sin esperar — seguirá descargando en segundo plano',
+  'welcome.tip.1': 'Todo lo que escribas se queda en tu dispositivo. Nada se envía a ningún servidor.',
+  'welcome.tip.2': 'Puedes cambiar de compañera cuando quieras desde Ajustes.',
+  'welcome.tip.3': '¿Sabías que también tenemos ejercicios de respiración guiada en "Calma"?',
+  'welcome.tip.4': 'Esta descarga solo ocurre una vez — la próxima vez será instantáneo.',
   'welcome.companion.title': 'Elige tu compañera',
   'welcome.companion.desc':
     'Aura funciona por completo en tu dispositivo. Antes de nada, elige quién te va a acompañar — puedes cambiarla luego cuando quieras.',
@@ -104,6 +110,9 @@ const es: Dict = {
   'chat.stop': 'Detener',
   'chat.downloadingModel': 'Descargando {{pack}}…',
   'chat.regenerate': 'Generar de nuevo',
+  'chat.clear': 'Limpiar chat',
+  'chat.clear.confirm': '¿De verdad quieres borrar el historial de conversación? Esto no se puede deshacer.',
+  'chat.scrollBottom': 'Bajar al final',
 
   'journal.title': 'Diario',
   'journal.subtitle':
@@ -136,6 +145,12 @@ const es: Dict = {
   'settings.language.title': 'Idioma',
   'settings.language.desc':
     'Aura detecta el idioma de tu región automáticamente. Puedes cambiarlo aquí en cualquier momento.',
+  'settings.theme.title': 'Apariencia',
+  'settings.theme.desc': 'Elige cómo se ve Aura en tu pantalla.',
+  'settings.theme.light': 'Claro',
+  'settings.theme.dark': 'Oscuro',
+  'settings.theme.system': 'Sistema',
+  'settings.model.label': 'Modelo subyacente',
   'settings.engine.loadingDefault': 'Descargando modelo…',
   'settings.engine.ready': '✓ Listo — Aura funcionará por completo en este dispositivo.',
   'settings.engine.errorPrefix': 'No se pudo cargar el modelo local: ',
@@ -208,6 +223,8 @@ const es: Dict = {
   'settings.toggle.autoRead.desc': 'Haz que Aura lea en voz alta cada respuesta al llegar.',
   'settings.toggle.reduceMotion.title': 'Reducir movimiento',
   'settings.toggle.reduceMotion.desc': 'Calma las animaciones suaves de la app.',
+  'settings.toggle.sound.title': 'Efectos de sonido',
+  'settings.toggle.sound.desc': 'Reproduce campanas meditativas al realizar acciones.',
   'settings.privacy':
     'Tus estados de ánimo, diario y rutinas se guardan solo en este navegador; nunca salen de tu dispositivo. Solo el texto que envías activamente a la IA se comparte para generar una respuesta.',
   'settings.danger.title': 'Borrar todos mis datos',
@@ -257,6 +274,12 @@ const en: Dict = {
   'welcome.downloading.title': 'Downloading {{pack}}…',
   'welcome.downloading.sub': 'First time only. This can take a few minutes — keep the app open.',
   'welcome.downloading.retry': 'Retry',
+  'welcome.downloading.signin': 'While it downloads, you can sign in (optional):',
+  'welcome.downloading.skip': 'Continue without waiting — it keeps downloading in the background',
+  'welcome.tip.1': 'Everything you write stays on your device. Nothing is ever sent to a server.',
+  'welcome.tip.2': 'You can switch companions anytime from Settings.',
+  'welcome.tip.3': 'Did you know we also have guided breathing exercises under "Calm"?',
+  'welcome.tip.4': "This download only happens once — next time it'll be instant.",
   'welcome.companion.title': 'Choose your companion',
   'welcome.companion.desc':
     "Aura runs entirely on your device. Before anything else, pick who'll be with you — you can change it later any time.",
@@ -302,6 +325,9 @@ const en: Dict = {
   'chat.stop': 'Stop',
   'chat.downloadingModel': 'Downloading {{pack}}…',
   'chat.regenerate': 'Regenerate',
+  'chat.clear': 'Clear Chat',
+  'chat.clear.confirm': 'Are you sure you want to clear your conversation history? This cannot be undone.',
+  'chat.scrollBottom': 'Scroll down',
 
   'journal.title': 'Journal',
   'journal.subtitle':
@@ -334,6 +360,12 @@ const en: Dict = {
   'settings.language.title': 'Language',
   'settings.language.desc':
     "Aura detects your region's language automatically. You can change it here any time.",
+  'settings.theme.title': 'Appearance',
+  'settings.theme.desc': 'Choose how Aura looks on your screen.',
+  'settings.theme.light': 'Light',
+  'settings.theme.dark': 'Dark',
+  'settings.theme.system': 'System',
+  'settings.model.label': 'Underlying Model',
   'settings.engine.loadingDefault': 'Downloading model…',
   'settings.engine.ready': '✓ Ready — Aura will run fully on this device.',
   'settings.engine.errorPrefix': "Couldn't load the local model: ",
@@ -406,6 +438,8 @@ const en: Dict = {
   'settings.toggle.autoRead.desc': 'Have Aura read each chat reply out loud as it arrives.',
   'settings.toggle.reduceMotion.title': 'Reduce motion',
   'settings.toggle.reduceMotion.desc': 'Calm the gentle animations across the app.',
+  'settings.toggle.sound.title': 'Sound effects',
+  'settings.toggle.sound.desc': 'Play calm, meditative chimes for actions.',
   'settings.privacy':
     'Your moods, journal, and routines are stored only in this browser — they never leave your device. Only the text you actively send to the AI is shared to generate a reply.',
   'settings.danger.title': 'Clear all my data',
@@ -455,6 +489,12 @@ const fr: Dict = {
   'welcome.downloading.title': 'Téléchargement de {{pack}}…',
   'welcome.downloading.sub': 'Une seule fois. Cela peut prendre quelques minutes — gardez l’app ouverte.',
   'welcome.downloading.retry': 'Réessayer',
+  'welcome.downloading.signin': 'Pendant le téléchargement, vous pouvez vous connecter (facultatif) :',
+  'welcome.downloading.skip': 'Continuer sans attendre — le téléchargement se poursuit en arrière-plan',
+  'welcome.tip.1': "Tout ce que vous écrivez reste sur votre appareil. Rien n'est jamais envoyé à un serveur.",
+  'welcome.tip.2': 'Vous pouvez changer de compagne à tout moment depuis les Réglages.',
+  'welcome.tip.3': 'Saviez-vous que nous avons aussi des exercices de respiration guidée dans « Calme » ?',
+  'welcome.tip.4': "Ce téléchargement n'a lieu qu'une seule fois — la prochaine fois ce sera instantané.",
   'welcome.companion.title': 'Choisissez votre compagne',
   'welcome.companion.desc':
     "Aura fonctionne entièrement sur votre appareil. Avant tout, choisissez qui vous accompagnera — vous pourrez en changer plus tard.",
@@ -500,6 +540,9 @@ const fr: Dict = {
   'chat.stop': 'Arrêter',
   'chat.downloadingModel': 'Téléchargement de {{pack}}…',
   'chat.regenerate': 'Régénérer',
+  'chat.clear': 'Effacer le chat',
+  'chat.clear.confirm': 'Êtes-vous sûr de vouloir effacer l\'historique des conversations ? Cette action est irréversible.',
+  'chat.scrollBottom': 'Faire défiler vers le bas',
 
   'journal.title': 'Journal',
   'journal.subtitle':
@@ -532,6 +575,12 @@ const fr: Dict = {
   'settings.language.title': 'Langue',
   'settings.language.desc':
     "Aura détecte automatiquement la langue de votre région. Vous pouvez la changer ici à tout moment.",
+  'settings.theme.title': 'Apparence',
+  'settings.theme.desc': 'Choisissez comment Aura s\'affiche sur votre écran.',
+  'settings.theme.light': 'Clair',
+  'settings.theme.dark': 'Sombre',
+  'settings.theme.system': 'Système',
+  'settings.model.label': 'Modèle sous-jacent',
   'settings.engine.loadingDefault': 'Téléchargement du modèle…',
   'settings.engine.ready': '✓ Prêt — Aura fonctionnera entièrement sur cet appareil.',
   'settings.engine.errorPrefix': "Impossible de charger le modèle local : ",
@@ -604,6 +653,8 @@ const fr: Dict = {
   'settings.toggle.autoRead.desc': "Faire lire à voix haute chaque réponse d'Aura à son arrivée.",
   'settings.toggle.reduceMotion.title': 'Réduire les animations',
   'settings.toggle.reduceMotion.desc': "Atténuer les animations douces de l'application.",
+  'settings.toggle.sound.title': 'Effets sonores',
+  'settings.toggle.sound.desc': 'Jouer des carillons calmes et méditatifs pour les actions.',
   'settings.privacy':
     "Vos humeurs, votre journal et vos routines ne sont stockés que dans ce navigateur — ils ne quittent jamais votre appareil. Seul le texte que vous envoyez activement à l'IA est partagé pour générer une réponse.",
   'settings.danger.title': 'Effacer toutes mes données',
@@ -653,6 +704,12 @@ const pt: Dict = {
   'welcome.downloading.title': 'A transferir {{pack}}…',
   'welcome.downloading.sub': 'Só na primeira vez. Pode demorar alguns minutos — mantém a app aberta.',
   'welcome.downloading.retry': 'Tentar novamente',
+  'welcome.downloading.signin': 'Enquanto descarrega, podes iniciar sessão (opcional):',
+  'welcome.downloading.skip': 'Continuar sem esperar — continua a descarregar em segundo plano',
+  'welcome.tip.1': 'Tudo o que escreves fica no teu dispositivo. Nada é enviado para nenhum servidor.',
+  'welcome.tip.2': 'Podes mudar de companheira a qualquer momento nas Definições.',
+  'welcome.tip.3': 'Sabias que também temos exercícios de respiração guiada em "Calma"?',
+  'welcome.tip.4': 'Esta transferência só acontece uma vez — da próxima vez será instantâneo.',
   'welcome.companion.title': 'Escolhe a tua companheira',
   'welcome.companion.desc':
     'O Aura funciona inteiramente no teu dispositivo. Antes de mais nada, escolhe quem te vai acompanhar — podes mudar mais tarde.',
@@ -698,6 +755,9 @@ const pt: Dict = {
   'chat.stop': 'Parar',
   'chat.downloadingModel': 'A transferir {{pack}}…',
   'chat.regenerate': 'Gerar de novo',
+  'chat.clear': 'Limpar chat',
+  'chat.clear.confirm': 'Tens a certeza de que desejas limpar o histórico de conversas? Isto não pode ser desfeito.',
+  'chat.scrollBottom': 'Descer para o fim',
 
   'journal.title': 'Diário',
   'journal.subtitle':
@@ -729,6 +789,12 @@ const pt: Dict = {
   'settings.language.title': 'Idioma',
   'settings.language.desc':
     'O Aura deteta automaticamente o idioma da tua região. Podes alterá-lo aqui a qualquer momento.',
+  'settings.theme.title': 'Aparência',
+  'settings.theme.desc': 'Escolhe como o Aura aparece no teu ecrã.',
+  'settings.theme.light': 'Claro',
+  'settings.theme.dark': 'Escuro',
+  'settings.theme.system': 'Sistema',
+  'settings.model.label': 'Modelo subjacente',
   'settings.engine.loadingDefault': 'A transferir o modelo…',
   'settings.engine.ready': '✓ Pronto — o Aura vai correr inteiramente neste dispositivo.',
   'settings.engine.errorPrefix': 'Não foi possível carregar o modelo local: ',
@@ -801,6 +867,8 @@ const pt: Dict = {
   'settings.toggle.autoRead.desc': 'Faz o Aura ler em voz alta cada resposta assim que chega.',
   'settings.toggle.reduceMotion.title': 'Reduzir movimento',
   'settings.toggle.reduceMotion.desc': 'Acalma as animações suaves da app.',
+  'settings.toggle.sound.title': 'Efeitos de som',
+  'settings.toggle.sound.desc': 'Reproduz carrilhões meditativos ao realizar ações.',
   'settings.privacy':
     'Os teus estados de espírito, diário e rotinas ficam guardados apenas neste navegador — nunca saem do teu dispositivo. Só o texto que envias ativamente à IA é partilhado para gerar uma resposta.',
   'settings.danger.title': 'Apagar todos os meus dados',
@@ -850,6 +918,12 @@ const de: Dict = {
   'welcome.downloading.title': '{{pack}} wird heruntergeladen…',
   'welcome.downloading.sub': 'Nur beim ersten Mal. Kann einige Minuten dauern — lass die App offen.',
   'welcome.downloading.retry': 'Erneut versuchen',
+  'welcome.downloading.signin': 'Während des Downloads kannst du dich anmelden (optional):',
+  'welcome.downloading.skip': 'Ohne Warten fortfahren — der Download läuft im Hintergrund weiter',
+  'welcome.tip.1': 'Alles, was du schreibst, bleibt auf deinem Gerät. Nichts wird je an einen Server gesendet.',
+  'welcome.tip.2': 'Du kannst deine Begleiterin jederzeit in den Einstellungen wechseln.',
+  'welcome.tip.3': 'Wusstest du, dass wir unter "Ruhe" auch geführte Atemübungen haben?',
+  'welcome.tip.4': 'Dieser Download passiert nur einmal — beim nächsten Mal geht es sofort.',
   'welcome.companion.title': 'Wähle deine Begleiterin',
   'welcome.companion.desc':
     'Aura läuft vollständig auf deinem Gerät. Wähle zuerst, wer dich begleiten soll — du kannst das später jederzeit ändern.',
@@ -895,6 +969,9 @@ const de: Dict = {
   'chat.stop': 'Stopp',
   'chat.downloadingModel': '{{pack}} wird heruntergeladen…',
   'chat.regenerate': 'Neu generieren',
+  'chat.clear': 'Chat leeren',
+  'chat.clear.confirm': 'Bist du sicher, dass du den Gesprächsverlauf löschen möchtest? Dies kann nicht rückgängig gemacht werden.',
+  'chat.scrollBottom': 'Nach unten scrollen',
 
   'journal.title': 'Tagebuch',
   'journal.subtitle':
@@ -926,6 +1003,12 @@ const de: Dict = {
   'settings.language.title': 'Sprache',
   'settings.language.desc':
     'Aura erkennt die Sprache deiner Region automatisch. Du kannst sie hier jederzeit ändern.',
+  'settings.theme.title': 'Erscheinungsbild',
+  'settings.theme.desc': 'Wähle aus, wie Aura auf deinem Bildschirm angezeigt wird.',
+  'settings.theme.light': 'Hell',
+  'settings.theme.dark': 'Dunkel',
+  'settings.theme.system': 'System',
+  'settings.model.label': 'Zugrundeliegendes Modell',
   'settings.engine.loadingDefault': 'Modell wird heruntergeladen…',
   'settings.engine.ready': '✓ Bereit — Aura läuft vollständig auf diesem Gerät.',
   'settings.engine.errorPrefix': 'Lokales Modell konnte nicht geladen werden: ',
@@ -998,6 +1081,8 @@ const de: Dict = {
   'settings.toggle.autoRead.desc': 'Lässt Aura jede Chat-Antwort sofort beim Eintreffen vorlesen.',
   'settings.toggle.reduceMotion.title': 'Bewegung reduzieren',
   'settings.toggle.reduceMotion.desc': 'Beruhigt die sanften Animationen der App.',
+  'settings.toggle.sound.title': 'Soundeffekte',
+  'settings.toggle.sound.desc': 'Spielt ruhige, meditative Töne bei Aktionen ab.',
   'settings.privacy':
     'Deine Stimmungen, dein Tagebuch und deine Routinen werden nur in diesem Browser gespeichert — sie verlassen dein Gerät nie. Nur der Text, den du aktiv an die KI sendest, wird geteilt, um eine Antwort zu erzeugen.',
   'settings.danger.title': 'Alle meine Daten löschen',

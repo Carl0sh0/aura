@@ -5,12 +5,26 @@
 
 const SWELL_SECONDS = 3.6
 
+function isSoundEnabled(): boolean {
+  try {
+    const raw = localStorage.getItem('aura.settings')
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      return parsed.soundEffects !== false // default true
+    }
+  } catch {
+    // ignore
+  }
+  return true
+}
+
 /**
  * Plays the intro chime once. If the browser blocks autoplay (no user gesture
  * yet), the swell plays alongside the user's first tap/keypress instead.
  * Returns a stop function that fades the sound out and releases the AudioContext.
  */
 export function playIntroChime(): () => void {
+  if (!isSoundEnabled()) return () => {}
   const Ctx = window.AudioContext ?? (window as any).webkitAudioContext
   if (!Ctx) return () => {}
   let ctx: AudioContext
@@ -106,4 +120,124 @@ export function playIntroChime(): () => void {
       ctx.close().catch(() => {})
     }
   }
+}
+
+/**
+ * Plays a fast, soft click/tap sound for buttons and toggles.
+ */
+export function playTapChime() {
+  if (!isSoundEnabled()) return
+  const Ctx = window.AudioContext ?? (window as any).webkitAudioContext
+  if (!Ctx) return
+  let ctx: AudioContext
+  try {
+    ctx = new Ctx()
+  } catch {
+    return
+  }
+  const now = ctx.currentTime
+  const osc = ctx.createOscillator()
+  const gain = ctx.createGain()
+  
+  osc.type = 'sine'
+  osc.frequency.setValueAtTime(880, now) // A5
+  
+  gain.gain.setValueAtTime(0.0001, now)
+  gain.gain.exponentialRampToValueAtTime(0.03, now + 0.01)
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15)
+  
+  osc.connect(gain)
+  gain.connect(ctx.destination)
+  
+  osc.start(now)
+  osc.stop(now + 0.2)
+  window.setTimeout(() => ctx.close().catch(() => {}), 250)
+}
+
+/**
+ * Plays an ascending soft dual-bell chime for page navigation.
+ */
+export function playNavChime() {
+  if (!isSoundEnabled()) return
+  const Ctx = window.AudioContext ?? (window as any).webkitAudioContext
+  if (!Ctx) return
+  let ctx: AudioContext
+  try {
+    ctx = new Ctx()
+  } catch {
+    return
+  }
+  const now = ctx.currentTime
+  
+  // First note: C5 (523.25 Hz)
+  const osc1 = ctx.createOscillator()
+  const gain1 = ctx.createGain()
+  osc1.type = 'sine'
+  osc1.frequency.setValueAtTime(523.25, now)
+  gain1.gain.setValueAtTime(0.0001, now)
+  gain1.gain.exponentialRampToValueAtTime(0.02, now + 0.01)
+  gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.4)
+  osc1.connect(gain1)
+  gain1.connect(ctx.destination)
+  osc1.start(now)
+  osc1.stop(now + 0.45)
+  
+  // Second note: E5 (659.25 Hz) slightly delayed
+  const osc2 = ctx.createOscillator()
+  const gain2 = ctx.createGain()
+  osc2.type = 'sine'
+  osc2.frequency.setValueAtTime(659.25, now + 0.08)
+  gain2.gain.setValueAtTime(0.0001, now + 0.08)
+  gain2.gain.exponentialRampToValueAtTime(0.02, now + 0.09)
+  gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.48)
+  osc2.connect(gain2)
+  gain2.connect(ctx.destination)
+  osc2.start(now + 0.08)
+  osc2.stop(now + 0.5)
+
+  window.setTimeout(() => ctx.close().catch(() => {}), 600)
+}
+
+/**
+ * Plays a warm, descending dual-resonance chime for AI reply completion.
+ */
+export function playReplyChime() {
+  if (!isSoundEnabled()) return
+  const Ctx = window.AudioContext ?? (window as any).webkitAudioContext
+  if (!Ctx) return
+  let ctx: AudioContext
+  try {
+    ctx = new Ctx()
+  } catch {
+    return
+  }
+  const now = ctx.currentTime
+  
+  // High note: G5 (783.99 Hz)
+  const osc1 = ctx.createOscillator()
+  const gain1 = ctx.createGain()
+  osc1.type = 'sine'
+  osc1.frequency.setValueAtTime(783.99, now)
+  gain1.gain.setValueAtTime(0.0001, now)
+  gain1.gain.exponentialRampToValueAtTime(0.015, now + 0.02)
+  gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.5)
+  osc1.connect(gain1)
+  gain1.connect(ctx.destination)
+  osc1.start(now)
+  osc1.stop(now + 0.55)
+  
+  // Low note: C5 (523.25 Hz) slightly delayed
+  const osc2 = ctx.createOscillator()
+  const gain2 = ctx.createGain()
+  osc2.type = 'sine'
+  osc2.frequency.setValueAtTime(523.25, now + 0.12)
+  gain2.gain.setValueAtTime(0.0001, now + 0.12)
+  gain2.gain.exponentialRampToValueAtTime(0.025, now + 0.14)
+  gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.7)
+  osc2.connect(gain2)
+  gain2.connect(ctx.destination)
+  osc2.start(now + 0.12)
+  osc2.stop(now + 0.75)
+
+  window.setTimeout(() => ctx.close().catch(() => {}), 900)
 }

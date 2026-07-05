@@ -1,16 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        cream: '#f6f1e7',
-        sand: '#efe7d6',
-        clay: '#c97b5a',
-        sage: '#6f8574',
-        sagedeep: '#4f6155',
-        ink: '#2f2a26',
-        muted: '#7c756c',
+        cream: 'var(--color-cream)',
+        sand: 'var(--color-sand)',
+        clay: 'var(--color-clay)',
+        sage: 'var(--color-sage)',
+        sagedeep: 'var(--color-sagedeep)',
+        ink: 'var(--color-ink)',
+        muted: 'var(--color-muted)',
       },
       fontFamily: {
         display: ['Fraunces', 'Georgia', 'serif'],

@@ -4,6 +4,32 @@
 
 :root {
   color-scheme: light;
+  --color-cream: #f6f1e7;
+  --color-sand: #efe7d6;
+  --color-clay: #c97b5a;
+  --color-sage: #6f8574;
+  --color-sagedeep: #4f6155;
+  --color-ink: #2f2a26;
+  --color-muted: #7c756c;
+  --bg-gradient: radial-gradient(120% 120% at 15% 0%, #faf6ee 0%, #f2ebdd 55%, #ece3d1 100%);
+  --card-bg: rgba(255, 253, 248, 0.72);
+  --card-border: rgba(120, 110, 90, 0.12);
+  --card-shadow: rgba(60, 50, 35, 0.35);
+}
+
+html.dark {
+  color-scheme: dark;
+  --color-cream: #141210;
+  --color-sand: #201c18;
+  --color-clay: #d68765;
+  --color-sage: #8da493;
+  --color-sagedeep: #afc1b3;
+  --color-ink: #f2ebd9;
+  --color-muted: #a69e94;
+  --bg-gradient: radial-gradient(120% 120% at 15% 0%, #1e1b18 0%, #141210 55%, #0c0b09 100%);
+  --card-bg: rgba(26, 22, 19, 0.75);
+  --card-border: rgba(180, 170, 150, 0.12);
+  --card-shadow: rgba(0, 0, 0, 0.55);
 }
 
 * {
@@ -13,9 +39,10 @@
 body {
   margin: 0;
   font-family: 'Inter', system-ui, sans-serif;
-  background: radial-gradient(120% 120% at 15% 0%, #faf6ee 0%, #f2ebdd 55%, #ece3d1 100%);
-  color: #2f2a26;
+  background: var(--bg-gradient);
+  color: var(--color-ink);
   min-height: 100vh;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 ::selection {
@@ -47,9 +74,10 @@ html.reduce-motion *::after {
 }
 
 .card {
-  background: rgba(255, 253, 248, 0.72);
+  background: var(--card-bg);
   backdrop-filter: blur(6px);
-  border: 1px solid rgba(120, 110, 90, 0.12);
+  border: 1px solid var(--card-border);
   border-radius: 1.5rem;
-  box-shadow: 0 12px 40px -24px rgba(60, 50, 35, 0.35);
+  box-shadow: 0 12px 40px -24px var(--card-shadow);
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }

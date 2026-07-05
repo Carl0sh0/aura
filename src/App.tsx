@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import {
   Home,
   MessageCircleHeart,
@@ -17,9 +17,10 @@ import CompanionOnboarding from './components/CompanionOnboarding'
 import GoogleSignInButton from './components/GoogleSignInButton'
 import { googleSignInAvailable } from './lib/auth'
 import { useName } from './lib/store'
-import { useSettings, useActivePack } from './lib/settings'
+import { useSettings, useActivePack, useModelIdForPack } from './lib/settings'
 import { ensureLocalEngine, isModelDownloaded, webgpuSupported } from './lib/localEngine'
 import { useLang } from './lib/i18n'
+import { playIntroChime, playNavChime } from './lib/chime'
 
 type View = 'today' | 'chat' | 'journal' | 'routines' | 'calm' | 'settings'
 
@@ -41,23 +42,63 @@ export default function App() {
   const activePack = useActivePack()
   const { t } = useLang()
 
+  const isFirstView = useRef(true)
+
+  // Play intro chime on mount
+  useEffect(() => {
+    const stopChime = playIntroChime()
+    return () => {
+      if (typeof stopChime === 'function') stopChime()
+    }
+  }, [])
+
+  // Play navigation chime when view changes
+  useEffect(() => {
+    if (isFirstView.current) {
+      isFirstView.current = false
+      return
+    }
+    playNavChime()
+  }, [view])
+
   useEffect(() => {
     document.documentElement.classList.toggle('reduce-motion', settings.reduceMotion)
   }, [settings.reduceMotion])
 
+  // Apply light/dark/system theme to HTML element
+  useEffect(() => {
+    const applyTheme = () => {
+      const isDark =
+        settings.theme === 'dark' ||
+        (settings.theme === 'system' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      document.documentElement.classList.toggle('dark', isDark)
+    }
+
+    applyTheme()
+
+    if (settings.theme === 'system') {
+      const media = window.matchMedia('(prefers-color-scheme: dark)')
+      const listener = () => applyTheme()
+      media.addEventListener('change', listener)
+      return () => media.removeEventListener('change', listener)
+    }
+  }, [settings.theme])
+
   // Prewarm: load the active companion's model into the GPU at app start if its weights
   // are already cached, so the first message doesn't pay several seconds of load time.
   // Never triggers a download — only loads what's already on-device.
+  const activeModelId = useModelIdForPack(activePack.id)
   useEffect(() => {
     if (!settings.hasChosenCompanion || !webgpuSupported()) return
     let cancelled = false
-    isModelDownloaded(activePack.localModelId).then((downloaded) => {
-      if (!cancelled && downloaded) ensureLocalEngine(activePack.localModelId).catch(() => {})
+    isModelDownloaded(activeModelId).then((downloaded) => {
+      if (!cancelled && downloaded) ensureLocalEngine(activeModelId).catch(() => {})
     })
     return () => {
       cancelled = true
     }
-  }, [settings.hasChosenCompanion, activePack.localModelId])
+  }, [settings.hasChosenCompanion, activeModelId])
 
   // Everything in Aura runs on the chosen companion's model, so this comes before
   // even the name step.
@@ -67,7 +108,7 @@ export default function App() {
     )
   }
 
-  if (asking) {
+  if (asking && !name) {
     return (
       <div className="grid min-h-screen place-items-center p-6">
         <div className="card w-full max-w-md p-8 text-center animate-rise">

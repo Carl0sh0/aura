@@ -7,18 +7,19 @@ import {
   Loader2,
   Mic,
   ShieldCheck,
+  Sun,
   Trash2,
   Volume2,
   Waypoints,
   Wind,
 } from 'lucide-react'
-import { clearAllData, exportAllData, useSettings, type Settings as SettingsType } from '../lib/settings'
+import { clearAllData, exportAllData, useSettings, useModelIdForPack, type Settings as SettingsType } from '../lib/settings'
 import { speechSupported } from '../lib/speech'
 import { useName } from '../lib/store'
 import { emailCaptureAvailable, googleSignInAvailable, subscribeEmail, useProfile } from '../lib/auth'
 import GoogleSignInButton from './GoogleSignInButton'
 import { LANG_LABELS, SUPPORTED_LANGS, useLang } from '../lib/i18n'
-import { CHARACTER_PACKS, DEFAULT_PACK_ID, type CharacterPack } from '../lib/characterPacks'
+import { CHARACTER_PACKS, DEFAULT_PACK_ID, SUPPORTED_MODELS, type CharacterPack } from '../lib/characterPacks'
 import {
   isModelDownloaded,
   removeDownloadedModel,
@@ -26,6 +27,7 @@ import {
   useLocalEngineState,
   webgpuSupported,
 } from '../lib/localEngine'
+import { playTapChime } from '../lib/chime'
 
 const PACK_LIST = Object.values(CHARACTER_PACKS)
 
@@ -44,10 +46,13 @@ function Toggle({
       role="switch"
       aria-checked={on}
       disabled={disabled}
-      onClick={() => onChange(!on)}
+      onClick={() => {
+        playTapChime()
+        onChange(!on)
+      }}
       className={`relative h-7 w-12 shrink-0 rounded-full transition ${
         on ? 'bg-sage' : 'bg-ink/15'
-      } ${disabled ? 'opacity-40' : ''}`}
+      }  ${disabled ? 'opacity-40' : ''}`}
     >
       <span
         className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${
@@ -212,46 +217,57 @@ export default function Settings() {
   const lowMemory = typeof navigator !== 'undefined' && (navigator as any).deviceMemory < 4
 
   const activePack = CHARACTER_PACKS[settings.activePackId] ?? CHARACTER_PACKS[DEFAULT_PACK_ID]
-  const engineState = useLocalEngineState(activePack.localModelId)
+  const activeModelId = useModelIdForPack(activePack.id)
+  const engineState = useLocalEngineState(activeModelId)
   const [downloaded, setDownloaded] = useState(false)
 
-  // Track which model (if any) is currently loaded in GPU memory, across all packs, so we
-  // know what to unload when the user switches companions. Fixed set of hooks — safe.
-  const loadedStates = PACK_LIST.map((p) => useLocalEngineState(p.localModelId))
-  const previousLoadedModelId = PACK_LIST.find(
-    (p, i) => p.id !== activePack.id && loadedStates[i].status === 'ready',
-  )?.localModelId
+  // Track loaded states of each pack dynamically, avoiding hook rule violations
+  const calmModelId = useModelIdForPack('calm')
+  const groundedModelId = useModelIdForPack('grounded')
+  const reflectiveModelId = useModelIdForPack('reflective')
+
+  const calmEngineState = useLocalEngineState(calmModelId)
+  const groundedEngineState = useLocalEngineState(groundedModelId)
+  const reflectiveEngineState = useLocalEngineState(reflectiveModelId)
+
+  const previousLoadedModelId = (() => {
+    if (activePack.id !== 'calm' && calmEngineState.status === 'ready') return calmModelId
+    if (activePack.id !== 'grounded' && groundedEngineState.status === 'ready') return groundedModelId
+    if (activePack.id !== 'reflective' && reflectiveEngineState.status === 'ready') return reflectiveModelId
+    return undefined
+  })()
 
   useEffect(() => {
     let cancelled = false
-    isModelDownloaded(activePack.localModelId).then((ok) => {
+    isModelDownloaded(activeModelId).then((ok) => {
       if (!cancelled) setDownloaded(ok)
     })
     return () => {
       cancelled = true
     }
-  }, [activePack.localModelId])
+  }, [activeModelId])
 
   // Already-downloaded companions load straight from the on-device cache — no need to make
   // the user tap "Download" again just to switch back to a model they already have.
   useEffect(() => {
     if (gpuOk && downloaded && engineState.status === 'idle') {
-      switchActiveLocalModel(activePack.localModelId, previousLoadedModelId).catch(() => {})
+      switchActiveLocalModel(activeModelId, previousLoadedModelId).catch(() => {})
     }
-  }, [gpuOk, downloaded, engineState.status, activePack.localModelId, previousLoadedModelId])
+  }, [gpuOk, downloaded, engineState.status, activeModelId, previousLoadedModelId])
 
   const set = (patch: Partial<SettingsType>) => setSettings((s) => ({ ...s, ...patch }))
 
   function choosePack(pack: CharacterPack) {
+    playTapChime()
     set({ activePackId: pack.id })
   }
 
   function handleDownload() {
-    switchActiveLocalModel(activePack.localModelId, previousLoadedModelId).catch(() => {})
+    switchActiveLocalModel(activeModelId, previousLoadedModelId).catch(() => {})
   }
 
   async function handleRemoveDownload() {
-    await removeDownloadedModel(activePack.localModelId)
+    await removeDownloadedModel(activeModelId)
     setDownloaded(false)
   }
 
@@ -284,7 +300,10 @@ export default function Settings() {
           {SUPPORTED_LANGS.map((l) => (
             <button
               key={l}
-              onClick={() => setLang(l)}
+              onClick={() => {
+                playTapChime()
+                setLang(l)
+              }}
               className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                 lang === l
                   ? 'border-sage bg-sage/15 text-sagedeep'
@@ -292,6 +311,33 @@ export default function Settings() {
               }`}
             >
               {LANG_LABELS[l]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Theme selection */}
+      <div className="card mt-4 p-5">
+        <div className="mb-3 flex items-center gap-2">
+          <Sun size={18} className="text-sagedeep" />
+          <p className="font-medium text-ink">{t('settings.theme.title') || 'Appearance'}</p>
+        </div>
+        <p className="mb-3 text-sm text-muted">{t('settings.theme.desc') || 'Choose how Aura looks on your screen.'}</p>
+        <div className="flex gap-2">
+          {(['light', 'dark', 'system'] as const).map((tMode) => (
+            <button
+              key={tMode}
+              onClick={() => {
+                playTapChime()
+                set({ theme: tMode })
+              }}
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition capitalize ${
+                settings.theme === tMode
+                  ? 'border-sage bg-sage/15 text-sagedeep'
+                  : 'border-ink/10 bg-white/50 text-muted hover:border-sage/40'
+              }`}
+            >
+              {t(`settings.theme.${tMode}`) || tMode}
             </button>
           ))}
         </div>
@@ -328,47 +374,79 @@ export default function Settings() {
 
         {/* Single, unified download/status panel for whichever companion is selected above */}
         {gpuOk && (
-          <div className="mt-4 rounded-2xl border border-ink/8 bg-white/50 p-3.5">
-            {engineState.status === 'loading' && (
-              <div>
-                <div className="flex items-center gap-2 text-sm text-ink/80">
-                  <Loader2 size={14} className="animate-spin text-sage" />
-                  {engineState.text || t('settings.engine.loadingDefault')}
-                </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-ink/10">
-                  <div
-                    className="h-full rounded-full bg-sage transition-all"
-                    style={{ width: `${Math.round(engineState.progress * 100)}%` }}
-                  />
-                </div>
-              </div>
-            )}
-            {engineState.status === 'error' && (
-              <p className="flex items-start gap-2 text-sm text-clay">
-                <AlertTriangle size={15} className="mt-0.5 shrink-0" />
-                {t('settings.engine.errorPrefix')}
-                {engineState.error || 'unknown error'}
-              </p>
-            )}
-            {engineState.status === 'ready' && (
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-sagedeep">{t('settings.engine.ready')}</p>
-                <button
-                  onClick={handleRemoveDownload}
-                  className="inline-flex items-center gap-1 text-xs text-muted hover:text-clay"
-                >
-                  <Trash2 size={12} /> {t('settings.packs.removeDownload')}
-                </button>
-              </div>
-            )}
-            {engineState.status === 'idle' && !downloaded && (
-              <button
-                onClick={handleDownload}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-sagedeep underline-offset-2 hover:underline"
+          <div className="mt-4 rounded-2xl border border-ink/8 bg-white/50 p-4 animate-rise">
+            {/* Model Selection Dropdown */}
+            <div className="mb-4">
+              <label htmlFor="model-select" className="text-xs font-semibold uppercase tracking-wider text-muted block mb-1.5">
+                {t('settings.model.label') || 'Underlying Model'}
+              </label>
+              <select
+                id="model-select"
+                value={activeModelId}
+                onChange={(e) => {
+                  const newModelId = e.target.value
+                  set({
+                    modelOverrides: {
+                      ...settings.modelOverrides,
+                      [activePack.id]: newModelId
+                    }
+                  })
+                }}
+                className="w-full rounded-xl border border-ink/10 bg-white/60 dark:bg-sand/30 px-3 py-2 text-sm text-ink outline-none transition focus:border-sage/50"
               >
-                <Download size={14} /> {t('settings.engine.download')}
-              </button>
-            )}
+                {SUPPORTED_MODELS.map((m) => (
+                  <option key={m.id} value={m.id} className="dark:bg-sand bg-white text-ink">
+                    {m.label} ({m.vramGB} GB)
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1.5 text-xs text-muted leading-relaxed">
+                {SUPPORTED_MODELS.find(m => m.id === activeModelId)?.description}
+              </p>
+            </div>
+
+            <div className="border-t border-ink/8 pt-3">
+              {engineState.status === 'loading' && (
+                <div>
+                  <div className="flex items-center gap-2 text-sm text-ink/80">
+                    <Loader2 size={14} className="animate-spin text-sage" />
+                    {engineState.text || t('settings.engine.loadingDefault')}
+                  </div>
+                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-ink/10">
+                    <div
+                      className="h-full rounded-full bg-sage transition-all"
+                      style={{ width: `${Math.round(engineState.progress * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+              {engineState.status === 'error' && (
+                <p className="flex items-start gap-2 text-sm text-clay">
+                  <AlertTriangle size={15} className="mt-0.5 shrink-0" />
+                  {t('settings.engine.errorPrefix')}
+                  {engineState.error || 'unknown error'}
+                </p>
+              )}
+              {engineState.status === 'ready' && (
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-sagedeep">{t('settings.engine.ready')}</p>
+                  <button
+                    onClick={handleRemoveDownload}
+                    className="inline-flex items-center gap-1 text-xs text-muted hover:text-clay"
+                  >
+                    <Trash2 size={12} /> {t('settings.packs.removeDownload')}
+                  </button>
+                </div>
+              )}
+              {engineState.status === 'idle' && !downloaded && (
+                <button
+                  onClick={handleDownload}
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-sagedeep underline-offset-2 hover:underline"
+                >
+                  <Download size={14} /> {t('settings.engine.download')}
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -417,6 +495,14 @@ export default function Settings() {
           desc={t('settings.toggle.reduceMotion.desc')}
         >
           <Toggle on={settings.reduceMotion} onChange={(v) => set({ reduceMotion: v })} />
+        </Row>
+
+        <Row
+          icon={<Volume2 size={18} />}
+          title={t('settings.toggle.sound.title')}
+          desc={t('settings.toggle.sound.desc')}
+        >
+          <Toggle on={settings.soundEffects} onChange={(v) => set({ soundEffects: v })} />
         </Row>
       </div>
 
