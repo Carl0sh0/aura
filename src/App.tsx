@@ -11,6 +11,7 @@ import Chat from './components/Chat'
 import Journal from './components/Journal'
 import Routines from './components/Routines'
 import Settings from './components/Settings'
+import CompanionOnboarding from './components/CompanionOnboarding'
 import { useName } from './lib/store'
 import { useSettings } from './lib/settings'
 import { useLang } from './lib/i18n'
@@ -30,12 +31,20 @@ export default function App() {
   const [name, setName] = useName()
   const [asking, setAsking] = useState(!name)
   const [draft, setDraft] = useState('')
-  const [settings] = useSettings()
+  const [settings, setSettings] = useSettings()
   const { t } = useLang()
 
   useEffect(() => {
     document.documentElement.classList.toggle('reduce-motion', settings.reduceMotion)
   }, [settings.reduceMotion])
+
+  // Everything in Aura runs on the chosen companion's model, so this comes before
+  // even the name step.
+  if (!settings.hasChosenCompanion) {
+    return (
+      <CompanionOnboarding onDone={() => setSettings((s) => ({ ...s, hasChosenCompanion: true }))} />
+    )
+  }
 
   if (asking) {
     return (

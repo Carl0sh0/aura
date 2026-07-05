@@ -53,6 +53,11 @@ const es: Dict = {
   'welcome.namePlaceholder': 'Tu nombre (o un apodo)',
   'welcome.begin': 'Comenzar',
   'welcome.skip': 'Omitir por ahora',
+  'welcome.companion.title': 'Elige tu compañera',
+  'welcome.companion.desc':
+    'Aura funciona por completo en tu dispositivo. Antes de nada, elige quién te va a acompañar — puedes cambiarla luego cuando quieras.',
+  'welcome.companion.continue': 'Continuar',
+  'welcome.companion.hint': 'La descarga puede seguir en segundo plano mientras configuras lo demás.',
   'sidebar.disclaimer': 'Aura apoya tu bienestar, pero no sustituye la atención profesional.',
 
   'today.greeting.morning': 'Buenos días',
@@ -197,6 +202,11 @@ const en: Dict = {
   'welcome.namePlaceholder': 'Your name (or a nickname)',
   'welcome.begin': 'Begin',
   'welcome.skip': 'Skip for now',
+  'welcome.companion.title': 'Choose your companion',
+  'welcome.companion.desc':
+    "Aura runs entirely on your device. Before anything else, pick who'll be with you — you can change it later any time.",
+  'welcome.companion.continue': 'Continue',
+  'welcome.companion.hint': 'The download can keep going in the background while you set up the rest.',
   'sidebar.disclaimer': "Aura supports wellbeing but isn't a substitute for professional care.",
 
   'today.greeting.morning': 'Good morning',
@@ -341,6 +351,11 @@ const fr: Dict = {
   'welcome.namePlaceholder': 'Votre prénom (ou un surnom)',
   'welcome.begin': 'Commencer',
   'welcome.skip': 'Passer pour l’instant',
+  'welcome.companion.title': 'Choisissez votre compagne',
+  'welcome.companion.desc':
+    "Aura fonctionne entièrement sur votre appareil. Avant tout, choisissez qui vous accompagnera — vous pourrez en changer plus tard.",
+  'welcome.companion.continue': 'Continuer',
+  'welcome.companion.hint': 'Le téléchargement peut continuer en arrière-plan pendant que vous configurez le reste.',
   'sidebar.disclaimer': "Aura soutient le bien-être, mais ne remplace pas un accompagnement professionnel.",
 
   'today.greeting.morning': 'Bonjour',
@@ -485,6 +500,11 @@ const pt: Dict = {
   'welcome.namePlaceholder': 'O teu nome (ou uma alcunha)',
   'welcome.begin': 'Começar',
   'welcome.skip': 'Saltar por agora',
+  'welcome.companion.title': 'Escolhe a tua companheira',
+  'welcome.companion.desc':
+    'O Aura funciona inteiramente no teu dispositivo. Antes de mais nada, escolhe quem te vai acompanhar — podes mudar mais tarde.',
+  'welcome.companion.continue': 'Continuar',
+  'welcome.companion.hint': 'A transferência pode continuar em segundo plano enquanto configuras o resto.',
   'sidebar.disclaimer': 'O Aura apoia o teu bem-estar, mas não substitui o acompanhamento profissional.',
 
   'today.greeting.morning': 'Bom dia',
@@ -628,6 +648,11 @@ const de: Dict = {
   'welcome.namePlaceholder': 'Dein Name (oder ein Spitzname)',
   'welcome.begin': 'Loslegen',
   'welcome.skip': 'Vorerst überspringen',
+  'welcome.companion.title': 'Wähle deine Begleiterin',
+  'welcome.companion.desc':
+    'Aura läuft vollständig auf deinem Gerät. Wähle zuerst, wer dich begleiten soll — du kannst das später jederzeit ändern.',
+  'welcome.companion.continue': 'Weiter',
+  'welcome.companion.hint': 'Der Download kann im Hintergrund weiterlaufen, während du den Rest einrichtest.',
   'sidebar.disclaimer': 'Aura unterstützt dein Wohlbefinden, ersetzt aber keine professionelle Betreuung.',
 
   'today.greeting.morning': 'Guten Morgen',

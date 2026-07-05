@@ -10,6 +10,7 @@ export type Settings = {
   autoRead: boolean // automatically speak Aura's chat replies
   reduceMotion: boolean // calm the animations
   activePackId: PackId // which on-device companion persona/pack is active
+  hasChosenCompanion: boolean // whether the user has been through the companion picker
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -18,6 +19,7 @@ export const DEFAULT_SETTINGS: Settings = {
   autoRead: false,
   reduceMotion: false,
   activePackId: DEFAULT_PACK_ID,
+  hasChosenCompanion: false,
 }
 
 // Merges with defaults so a settings object saved before a new field existed

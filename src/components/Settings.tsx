@@ -81,7 +81,7 @@ function Row({
   )
 }
 
-function PackCard({
+export function PackCard({
   pack,
   active,
   onSelect,
