@@ -67,7 +67,7 @@ export default function Chat() {
             return copy
           })
         },
-        { engine: settings.aiEngine, lang, pack },
+        { lang, pack },
       )
       if (c) setCrisis(true)
       // Optionally read the reply aloud as soon as it lands.
@@ -102,7 +102,9 @@ export default function Chat() {
         {messages.length === 0 ? (
           <div className="grid h-full place-items-center text-center">
             <div className="max-w-sm">
-              <div className="mx-auto mb-5 h-16 w-16 rounded-full bg-sage/25 animate-breathe" />
+              <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-full bg-sage/25 text-3xl animate-breathe">
+                {pack.glyph}
+              </div>
               <p className="font-display text-xl text-ink">{t('chat.empty.title')}</p>
               <p className="mt-1 text-sm text-muted">{t('chat.empty.sub')}</p>
               <div className="mt-5 flex flex-wrap justify-center gap-2">

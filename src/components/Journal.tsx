@@ -4,6 +4,7 @@ import { reflect } from '../lib/api'
 import { appendSpeech } from '../lib/speech'
 import { useJournal } from '../lib/store'
 import { useLang } from '../lib/i18n'
+import { useActivePack } from '../lib/settings'
 import CrisisBanner from './CrisisBanner'
 import MicButton from './MicButton'
 import SpeakButton from './SpeakButton'
@@ -17,6 +18,7 @@ export default function Journal() {
   const [busyId, setBusyId] = useState<string | null>(null)
   const [crisis, setCrisis] = useState(false)
   const { t, lang, localeTag } = useLang()
+  const pack = useActivePack()
 
   const PROMPTS = [
     t('journal.prompt.1'),
@@ -32,7 +34,7 @@ export default function Journal() {
     setText('')
     setBusyId(entry.id)
     try {
-      const { reflection, crisis: c } = await reflect(entry.text, entry.mood, lang)
+      const { reflection, crisis: c } = await reflect(entry.text, entry.mood, lang, pack)
       update(entry.id, { reflection })
       if (c) setCrisis(true)
     } catch {

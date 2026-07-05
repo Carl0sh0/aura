@@ -22,6 +22,7 @@ export type VoiceHint = {
 
 export type CharacterPack = {
   id: PackId
+  glyph: string
   nameKey: string
   taglineKey: string
   /** English system-prompt "voice and style" fragment — instructs the model, independent of reply language. */
@@ -38,6 +39,7 @@ export const DEFAULT_PACK_ID: PackId = 'calm'
 export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
   calm: {
     id: 'calm',
+    glyph: '🌿',
     nameKey: 'settings.packs.calm.name',
     taglineKey: 'settings.packs.calm.tagline',
     personaVoice: `Voice and style:
@@ -49,14 +51,15 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
 - Offer practical, evidence-informed tools when it fits — ideas drawn from CBT (reframing
   unhelpful thoughts), ACT (values, acceptance), mindfulness, behavioral activation, sleep
   and stress hygiene. Suggest, never prescribe. Use plain language, not jargon.`,
-    localModelId: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
-    localModelLabel: 'Llama 3.2 (3B, on-device)',
-    vramHintGB: 2.3,
+    localModelId: 'gemma3-1b-it-q4f16_1-MLC',
+    localModelLabel: 'Gemma 3 (1B, on-device)',
+    vramHintGB: 0.7,
     lowResourceRequired: true,
     ttsVoiceHint: { preferNames: ['female', 'samantha', 'victoria', 'zira'], pitch: 1, rate: 0.98 },
   },
   grounded: {
     id: 'grounded',
+    glyph: '🧭',
     nameKey: 'settings.packs.grounded.name',
     taglineKey: 'settings.packs.grounded.tagline',
     personaVoice: `Voice and style:
@@ -69,14 +72,15 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
 - Lean on structured tools — CBT reframes, small behavioral experiments, checklists,
   if-then plans — over open exploration. Suggest, never prescribe. Plain language, no jargon.
 - Still warm underneath the brevity: this is directness with care, not bluntness.`,
-    localModelId: 'gemma-2-2b-it-q4f16_1-MLC',
-    localModelLabel: 'Gemma 2 (2B, on-device)',
-    vramHintGB: 1.9,
-    lowResourceRequired: false,
+    localModelId: 'Qwen3-1.7B-q4f16_1-MLC',
+    localModelLabel: 'Qwen3 (1.7B, on-device)',
+    vramHintGB: 2.0,
+    lowResourceRequired: true,
     ttsVoiceHint: { preferNames: ['male', 'daniel', 'fred', 'david'], pitch: 0.95, rate: 1.05 },
   },
   reflective: {
     id: 'reflective',
+    glyph: '🌙',
     nameKey: 'settings.packs.reflective.name',
     taglineKey: 'settings.packs.reflective.tagline',
     personaVoice: `Voice and style:
@@ -89,10 +93,10 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
 - Draw more on mindfulness, self-compassion, and ACT-style values work than on structured
   behavioral tools. Suggest, never prescribe. Plain language, no jargon.
 - Comfortable with ambiguity and silence; doesn't need every message to resolve neatly.`,
-    localModelId: 'Phi-3.5-mini-instruct-q4f16_1-MLC',
-    localModelLabel: 'Phi-3.5 mini (on-device)',
-    vramHintGB: 3.7,
-    lowResourceRequired: false,
+    localModelId: 'Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC',
+    localModelLabel: 'Ministral 3 (3B, on-device)',
+    vramHintGB: 2.9,
+    lowResourceRequired: true,
     ttsVoiceHint: { preferNames: ['female', 'moira', 'tessa', 'karen'], pitch: 1.05, rate: 0.92 },
   },
 }

@@ -122,28 +122,21 @@ const es: Dict = {
   'settings.language.title': 'Idioma',
   'settings.language.desc':
     'Aura detecta el idioma de tu región automáticamente. Puedes cambiarlo aquí en cualquier momento.',
-  'settings.engine.title': 'Motor de IA',
-  'settings.engine.desc':
-    'Elige con quién habla Aura: Claude en la nube (mejor calidad) o un modelo pequeño que corre por completo en tu dispositivo (privado, funciona sin conexión).',
-  'settings.engine.cloud.title': 'Nube — Claude',
-  'settings.engine.cloud.desc':
-    'Las mejores respuestas. Requiere internet. Tu mensaje se envía a Claude para generar una respuesta.',
-  'settings.engine.local.title': 'En el dispositivo (privado)',
-  'settings.engine.local.desc.unsupported':
-    'Necesita un navegador con WebGPU (prueba un Chrome o Edge reciente).',
   'settings.engine.loadingDefault': 'Descargando modelo…',
   'settings.engine.ready': '✓ Listo — Aura funcionará por completo en este dispositivo.',
   'settings.engine.errorPrefix': 'No se pudo cargar el modelo local: ',
   'settings.engine.download': 'Descargar modelo para empezar',
+  'settings.packs.gpuRequired':
+    'Este navegador no soporta WebGPU, así que Aura no puede generar respuestas de IA aquí — todo funciona en el dispositivo, sin nube. Prueba un Chrome o Edge reciente.',
   'settings.packs.title': 'Elige tu compañera',
   'settings.packs.desc':
     'El tono de Aura cambia según la compañera que elijas — la seguridad y los límites nunca cambian.',
   'settings.packs.calm.name': 'Aura Calma',
-  'settings.packs.calm.tagline': 'Voz cálida y paciente, para el día a día.',
+  'settings.packs.calm.tagline': 'Tu amiga de siempre: cálida, paciente, sin prisa.',
   'settings.packs.grounded.name': 'Aura Firme',
-  'settings.packs.grounded.tagline': 'Práctica y directa, con un paso concreto a la vez.',
+  'settings.packs.grounded.tagline': 'Directa al grano: un paso concreto, ahora mismo.',
   'settings.packs.reflective.name': 'Aura Reflexiva',
-  'settings.packs.reflective.tagline': 'Ritmo pausado, con preguntas que invitan a mirar hacia adentro.',
+  'settings.packs.reflective.tagline': 'Ritmo lento, preguntas que abren puertas.',
   'settings.packs.download': 'Sin descargar',
   'settings.packs.downloaded': 'Descargado',
   'settings.packs.removeDownload': 'Eliminar descarga',
@@ -271,27 +264,21 @@ const en: Dict = {
   'settings.language.title': 'Language',
   'settings.language.desc':
     "Aura detects your region's language automatically. You can change it here any time.",
-  'settings.engine.title': 'AI engine',
-  'settings.engine.desc':
-    'Choose who Aura talks with: Claude in the cloud (best quality) or a small model that runs entirely on your device (private, works offline).',
-  'settings.engine.cloud.title': 'Cloud — Claude',
-  'settings.engine.cloud.desc':
-    'Best quality replies. Requires internet. Your message is sent to Claude to generate a reply.',
-  'settings.engine.local.title': 'On-device (private)',
-  'settings.engine.local.desc.unsupported': 'Needs a browser with WebGPU (try a recent Chrome or Edge).',
   'settings.engine.loadingDefault': 'Downloading model…',
   'settings.engine.ready': '✓ Ready — Aura will run fully on this device.',
   'settings.engine.errorPrefix': "Couldn't load the local model: ",
   'settings.engine.download': 'Download model to get started',
+  'settings.packs.gpuRequired':
+    "This browser doesn't support WebGPU, so Aura can't generate AI replies here — everything runs on-device, no cloud. Try a recent Chrome or Edge.",
   'settings.packs.title': 'Choose your companion',
   'settings.packs.desc':
     "Aura's tone changes with the companion you pick — safety and boundaries never do.",
   'settings.packs.calm.name': 'Aura Calm',
-  'settings.packs.calm.tagline': 'Warm and patient, for everyday moments.',
+  'settings.packs.calm.tagline': 'Your steady friend: warm, patient, unhurried.',
   'settings.packs.grounded.name': 'Aura Grounded',
-  'settings.packs.grounded.tagline': 'Practical and direct, one concrete step at a time.',
+  'settings.packs.grounded.tagline': 'Straight to the point: one concrete step, right now.',
   'settings.packs.reflective.name': 'Aura Reflective',
-  'settings.packs.reflective.tagline': 'Slower-paced, with questions that invite you to look inward.',
+  'settings.packs.reflective.tagline': 'Slow pace, questions that open doors.',
   'settings.packs.download': 'Not downloaded',
   'settings.packs.downloaded': 'Downloaded',
   'settings.packs.removeDownload': 'Remove download',
@@ -419,28 +406,21 @@ const fr: Dict = {
   'settings.language.title': 'Langue',
   'settings.language.desc':
     "Aura détecte automatiquement la langue de votre région. Vous pouvez la changer ici à tout moment.",
-  'settings.engine.title': "Moteur d'IA",
-  'settings.engine.desc':
-    "Choisissez avec qui Aura discute : Claude dans le cloud (meilleure qualité) ou un petit modèle qui tourne entièrement sur votre appareil (privé, fonctionne hors ligne).",
-  'settings.engine.cloud.title': 'Cloud — Claude',
-  'settings.engine.cloud.desc':
-    "Meilleures réponses. Nécessite internet. Votre message est envoyé à Claude pour générer une réponse.",
-  'settings.engine.local.title': 'Sur l’appareil (privé)',
-  'settings.engine.local.desc.unsupported':
-    "Nécessite un navigateur compatible WebGPU (essayez un Chrome ou Edge récent).",
   'settings.engine.loadingDefault': 'Téléchargement du modèle…',
   'settings.engine.ready': '✓ Prêt — Aura fonctionnera entièrement sur cet appareil.',
   'settings.engine.errorPrefix': "Impossible de charger le modèle local : ",
   'settings.engine.download': 'Télécharger le modèle pour commencer',
+  'settings.packs.gpuRequired':
+    "Ce navigateur ne prend pas en charge WebGPU, donc Aura ne peut pas générer de réponses ici — tout tourne sur l'appareil, sans cloud. Essayez un Chrome ou Edge récent.",
   'settings.packs.title': 'Choisissez votre compagne',
   'settings.packs.desc':
     "Le ton d'Aura change selon la compagne choisie — la sécurité et les limites, elles, ne changent jamais.",
   'settings.packs.calm.name': 'Aura Calme',
-  'settings.packs.calm.tagline': 'Voix chaleureuse et patiente, pour le quotidien.',
+  'settings.packs.calm.tagline': 'Votre amie de toujours : chaleureuse, patiente, sans hâte.',
   'settings.packs.grounded.name': 'Aura Ancrée',
-  'settings.packs.grounded.tagline': 'Pratique et directe, un pas concret à la fois.',
+  'settings.packs.grounded.tagline': 'Droit au but : un pas concret, tout de suite.',
   'settings.packs.reflective.name': 'Aura Réflexive',
-  'settings.packs.reflective.tagline': 'Rythme plus lent, avec des questions qui invitent à regarder en soi.',
+  'settings.packs.reflective.tagline': 'Rythme lent, des questions qui ouvrent des portes.',
   'settings.packs.download': 'Non téléchargé',
   'settings.packs.downloaded': 'Téléchargé',
   'settings.packs.removeDownload': 'Supprimer le téléchargement',
@@ -567,28 +547,21 @@ const pt: Dict = {
   'settings.language.title': 'Idioma',
   'settings.language.desc':
     'O Aura deteta automaticamente o idioma da tua região. Podes alterá-lo aqui a qualquer momento.',
-  'settings.engine.title': 'Motor de IA',
-  'settings.engine.desc':
-    'Escolhe com quem o Aura fala: Claude na nuvem (melhor qualidade) ou um modelo pequeno que corre inteiramente no teu dispositivo (privado, funciona offline).',
-  'settings.engine.cloud.title': 'Nuvem — Claude',
-  'settings.engine.cloud.desc':
-    'Melhores respostas. Requer internet. A tua mensagem é enviada ao Claude para gerar uma resposta.',
-  'settings.engine.local.title': 'No dispositivo (privado)',
-  'settings.engine.local.desc.unsupported':
-    'Precisa de um navegador com WebGPU (experimenta um Chrome ou Edge recente).',
   'settings.engine.loadingDefault': 'A transferir o modelo…',
   'settings.engine.ready': '✓ Pronto — o Aura vai correr inteiramente neste dispositivo.',
   'settings.engine.errorPrefix': 'Não foi possível carregar o modelo local: ',
   'settings.engine.download': 'Transferir modelo para começar',
+  'settings.packs.gpuRequired':
+    'Este navegador não suporta WebGPU, por isso o Aura não consegue gerar respostas aqui — tudo corre no dispositivo, sem nuvem. Experimenta um Chrome ou Edge recente.',
   'settings.packs.title': 'Escolhe a tua companheira',
   'settings.packs.desc':
     'O tom da Aura muda consoante a companheira escolhida — a segurança e os limites nunca mudam.',
   'settings.packs.calm.name': 'Aura Calma',
-  'settings.packs.calm.tagline': 'Voz calorosa e paciente, para o dia a dia.',
+  'settings.packs.calm.tagline': 'A tua amiga de sempre: calorosa, paciente, sem pressa.',
   'settings.packs.grounded.name': 'Aura Firme',
-  'settings.packs.grounded.tagline': 'Prática e direta, um passo concreto de cada vez.',
+  'settings.packs.grounded.tagline': 'Direto ao ponto: um passo concreto, agora mesmo.',
   'settings.packs.reflective.name': 'Aura Reflexiva',
-  'settings.packs.reflective.tagline': 'Ritmo mais lento, com perguntas que convidam a olhar para dentro.',
+  'settings.packs.reflective.tagline': 'Ritmo lento, perguntas que abrem portas.',
   'settings.packs.download': 'Não transferido',
   'settings.packs.downloaded': 'Transferido',
   'settings.packs.removeDownload': 'Remover transferência',
@@ -715,28 +688,21 @@ const de: Dict = {
   'settings.language.title': 'Sprache',
   'settings.language.desc':
     'Aura erkennt die Sprache deiner Region automatisch. Du kannst sie hier jederzeit ändern.',
-  'settings.engine.title': 'KI-Modul',
-  'settings.engine.desc':
-    'Wähle, mit wem Aura spricht: Claude in der Cloud (beste Qualität) oder ein kleines Modell, das vollständig auf deinem Gerät läuft (privat, funktioniert offline).',
-  'settings.engine.cloud.title': 'Cloud — Claude',
-  'settings.engine.cloud.desc':
-    'Beste Antwortqualität. Benötigt Internet. Deine Nachricht wird an Claude gesendet, um eine Antwort zu erzeugen.',
-  'settings.engine.local.title': 'Auf dem Gerät (privat)',
-  'settings.engine.local.desc.unsupported':
-    'Benötigt einen Browser mit WebGPU (probiere einen aktuellen Chrome oder Edge).',
   'settings.engine.loadingDefault': 'Modell wird heruntergeladen…',
   'settings.engine.ready': '✓ Bereit — Aura läuft vollständig auf diesem Gerät.',
   'settings.engine.errorPrefix': 'Lokales Modell konnte nicht geladen werden: ',
   'settings.engine.download': 'Modell herunterladen, um zu starten',
+  'settings.packs.gpuRequired':
+    'Dieser Browser unterstützt kein WebGPU, daher kann Aura hier keine KI-Antworten erzeugen — alles läuft auf dem Gerät, ohne Cloud. Probiere einen aktuellen Chrome oder Edge.',
   'settings.packs.title': 'Wähle deine Begleiterin',
   'settings.packs.desc':
     'Auras Ton ändert sich je nach gewählter Begleiterin — Sicherheit und Grenzen bleiben immer gleich.',
   'settings.packs.calm.name': 'Aura Ruhig',
-  'settings.packs.calm.tagline': 'Warm und geduldig, für den Alltag.',
+  'settings.packs.calm.tagline': 'Deine verlässliche Freundin: warm, geduldig, ohne Eile.',
   'settings.packs.grounded.name': 'Aura Bodenständig',
-  'settings.packs.grounded.tagline': 'Praktisch und direkt, ein konkreter Schritt nach dem anderen.',
+  'settings.packs.grounded.tagline': 'Auf den Punkt: ein konkreter Schritt, genau jetzt.',
   'settings.packs.reflective.name': 'Aura Reflektierend',
-  'settings.packs.reflective.tagline': 'Langsameres Tempo, mit Fragen, die zum Nachdenken einladen.',
+  'settings.packs.reflective.tagline': 'Langsames Tempo, Fragen, die Türen öffnen.',
   'settings.packs.download': 'Nicht heruntergeladen',
   'settings.packs.downloaded': 'Heruntergeladen',
   'settings.packs.removeDownload': 'Download entfernen',

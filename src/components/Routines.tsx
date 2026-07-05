@@ -15,6 +15,7 @@ import { generateRoutine } from '../lib/api'
 import { todayKey, useMoods, useRoutine } from '../lib/store'
 import { appendSpeech } from '../lib/speech'
 import { useLang } from '../lib/i18n'
+import { useActivePack } from '../lib/settings'
 import MicButton from './MicButton'
 
 const ICONS: Record<string, typeof Sun> = {
@@ -34,6 +35,7 @@ export default function Routines() {
   const [focus, setFocus] = useState('')
   const [busy, setBusy] = useState(false)
   const { t, lang } = useLang()
+  const pack = useActivePack()
 
   const MOOD_LABELS = [
     t('today.face.veryLow'),
@@ -49,7 +51,7 @@ export default function Routines() {
   async function make() {
     setBusy(true)
     try {
-      const r = await generateRoutine(moodWord, focus, lang)
+      const r = await generateRoutine(moodWord, focus, lang, pack)
       setRoutine({ date: todayKey(), intro: r.intro, habits: r.habits, done: {} })
     } finally {
       setBusy(false)

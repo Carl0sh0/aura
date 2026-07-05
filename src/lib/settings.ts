@@ -4,15 +4,12 @@ import { useCallback } from 'react'
 import { usePersistentState } from './store'
 import { CHARACTER_PACKS, DEFAULT_PACK_ID, type PackId, type VoiceHint } from './characterPacks'
 
-export type AiEngine = 'cloud' | 'local'
-
 export type Settings = {
   voiceInput: boolean // show the microphone (speech-to-text)
   readAloud: boolean // show "read aloud" buttons (text-to-speech)
   autoRead: boolean // automatically speak Aura's chat replies
   reduceMotion: boolean // calm the animations
-  aiEngine: AiEngine // 'cloud' = Claude (default), 'local' = on-device, private/offline
-  activePackId: PackId // which companion persona/pack is active (applies to both cloud and local)
+  activePackId: PackId // which on-device companion persona/pack is active
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -20,7 +17,6 @@ export const DEFAULT_SETTINGS: Settings = {
   readAloud: true,
   autoRead: false,
   reduceMotion: false,
-  aiEngine: 'cloud',
   activePackId: DEFAULT_PACK_ID,
 }
 

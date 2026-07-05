@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import {
   AlertTriangle,
   Check,
-  Cloud,
-  Cpu,
   Download,
   Globe,
   Loader2,
@@ -18,14 +16,8 @@ import { clearAllData, useSettings, type Settings as SettingsType } from '../lib
 import { speechSupported } from '../lib/speech'
 import { useName } from '../lib/store'
 import { LANG_LABELS, SUPPORTED_LANGS, useLang } from '../lib/i18n'
+import { CHARACTER_PACKS, DEFAULT_PACK_ID, type CharacterPack } from '../lib/characterPacks'
 import {
-  CHARACTER_PACKS,
-  DEFAULT_PACK_ID,
-  type CharacterPack,
-  type PackId,
-} from '../lib/characterPacks'
-import {
-  ensureLocalEngine,
   isModelDownloaded,
   removeDownloadedModel,
   switchActiveLocalModel,
@@ -89,129 +81,35 @@ function Row({
   )
 }
 
-function EngineCard({
-  active,
-  disabled,
-  icon,
-  title,
-  desc,
-  onClick,
-}: {
-  active: boolean
-  disabled?: boolean
-  icon: React.ReactNode
-  title: string
-  desc: string
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className={`flex-1 rounded-2xl border p-4 text-left transition ${
-        active
-          ? 'border-sage bg-sage/10'
-          : 'border-ink/10 bg-white/50 hover:border-sage/40'
-      } ${disabled ? 'cursor-not-allowed opacity-40' : ''}`}
-    >
-      <div className="mb-2 flex items-center gap-2">
-        <span className={active ? 'text-sagedeep' : 'text-muted'}>{icon}</span>
-        <span className="font-medium text-ink">{title}</span>
-      </div>
-      <p className="text-xs leading-relaxed text-muted">{desc}</p>
-    </button>
-  )
-}
-
 function PackCard({
   pack,
   active,
-  showModelInfo,
-  downloaded,
   onSelect,
-  onRemoveDownload,
 }: {
   pack: CharacterPack
   active: boolean
-  showModelInfo: boolean
-  downloaded: boolean
   onSelect: () => void
-  onRemoveDownload: () => void
 }) {
   const { t } = useLang()
-  const engineState = useLocalEngineState(pack.localModelId)
-
   return (
-    <div
-      className={`rounded-2xl border p-4 transition ${
-        active ? 'border-sage bg-sage/10' : 'border-ink/10 bg-white/50'
+    <button
+      type="button"
+      onClick={onSelect}
+      className={`rounded-2xl border p-4 text-left transition ${
+        active ? 'border-sage bg-sage/10' : 'border-ink/10 bg-white/50 hover:border-sage/40'
       }`}
     >
-      <button type="button" onClick={onSelect} className="w-full text-left">
-        <div className="flex items-center justify-between gap-2">
-          <span className="font-medium text-ink">{t(pack.nameKey)}</span>
-          {active && <Check size={16} className="shrink-0 text-sagedeep" />}
-        </div>
-        <p className="mt-1 text-xs leading-relaxed text-muted">{t(pack.taglineKey)}</p>
-        {showModelInfo && (
-          <p className="mt-1 text-[11px] text-muted/80">
-            {pack.localModelLabel} — ~{pack.vramHintGB}GB
-          </p>
-        )}
-      </button>
-
-      {showModelInfo && (
-        <div className="mt-3">
-          {engineState.status === 'loading' && (
-            <div>
-              <div className="flex items-center gap-2 text-xs text-ink/80">
-                <Loader2 size={13} className="animate-spin text-sage" />
-                {engineState.text || t('settings.engine.loadingDefault')}
-              </div>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-ink/10">
-                <div
-                  className="h-full rounded-full bg-sage transition-all"
-                  style={{ width: `${Math.round(engineState.progress * 100)}%` }}
-                />
-              </div>
-            </div>
-          )}
-          {engineState.status === 'error' && (
-            <p className="flex items-start gap-1.5 text-xs text-clay">
-              <AlertTriangle size={13} className="mt-0.5 shrink-0" />
-              {t('settings.engine.errorPrefix')}
-              {engineState.error || 'unknown error'}
-            </p>
-          )}
-          {engineState.status !== 'loading' && (
-            <div className="flex items-center gap-3 text-xs">
-              {downloaded ? (
-                <>
-                  <span className="inline-flex items-center gap-1 text-sagedeep">
-                    <Check size={13} /> {t('settings.packs.downloaded')}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onRemoveDownload()
-                    }}
-                    className="inline-flex items-center gap-1 text-muted hover:text-clay"
-                  >
-                    <Trash2 size={12} /> {t('settings.packs.removeDownload')}
-                  </button>
-                </>
-              ) : (
-                <span className="inline-flex items-center gap-1 text-muted">
-                  <Download size={12} /> {t('settings.packs.download')}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+      <div className="flex items-center justify-between gap-2">
+        <span className="flex items-center gap-1.5 font-medium text-ink">
+          <span className="text-lg">{pack.glyph}</span> {t(pack.nameKey)}
+        </span>
+        {active && <Check size={16} className="shrink-0 text-sagedeep" />}
+      </div>
+      <p className="mt-1 text-xs leading-relaxed text-muted">{t(pack.taglineKey)}</p>
+      <p className="mt-1 text-[11px] text-muted/80">
+        {pack.localModelLabel} — ~{pack.vramHintGB}GB
+      </p>
+    </button>
   )
 }
 
@@ -222,46 +120,50 @@ export default function Settings() {
   const voiceOk = speechSupported()
   const ttsOk = typeof window !== 'undefined' && 'speechSynthesis' in window
   const gpuOk = webgpuSupported()
-  const lowMemory =
-    typeof navigator !== 'undefined' && (navigator as any).deviceMemory < 4
-  const [downloaded, setDownloaded] = useState<Record<PackId, boolean>>({
-    calm: false,
-    grounded: false,
-    reflective: false,
-  })
+  const lowMemory = typeof navigator !== 'undefined' && (navigator as any).deviceMemory < 4
+
+  const activePack = CHARACTER_PACKS[settings.activePackId] ?? CHARACTER_PACKS[DEFAULT_PACK_ID]
+  const engineState = useLocalEngineState(activePack.localModelId)
+  const [downloaded, setDownloaded] = useState(false)
+
+  // Track which model (if any) is currently loaded in GPU memory, across all packs, so we
+  // know what to unload when the user switches companions. Fixed set of hooks — safe.
+  const loadedStates = PACK_LIST.map((p) => useLocalEngineState(p.localModelId))
+  const previousLoadedModelId = PACK_LIST.find(
+    (p, i) => p.id !== activePack.id && loadedStates[i].status === 'ready',
+  )?.localModelId
 
   useEffect(() => {
     let cancelled = false
-    Promise.all(PACK_LIST.map((p) => isModelDownloaded(p.localModelId))).then((results) => {
-      if (cancelled) return
-      setDownloaded(
-        Object.fromEntries(PACK_LIST.map((p, i) => [p.id, results[i]])) as Record<PackId, boolean>,
-      )
+    isModelDownloaded(activePack.localModelId).then((ok) => {
+      if (!cancelled) setDownloaded(ok)
     })
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [activePack.localModelId])
+
+  // Already-downloaded companions load straight from the on-device cache — no need to make
+  // the user tap "Download" again just to switch back to a model they already have.
+  useEffect(() => {
+    if (gpuOk && downloaded && engineState.status === 'idle') {
+      switchActiveLocalModel(activePack.localModelId, previousLoadedModelId).catch(() => {})
+    }
+  }, [gpuOk, downloaded, engineState.status, activePack.localModelId, previousLoadedModelId])
 
   const set = (patch: Partial<SettingsType>) => setSettings((s) => ({ ...s, ...patch }))
-  const activePack = CHARACTER_PACKS[settings.activePackId] ?? CHARACTER_PACKS[DEFAULT_PACK_ID]
-
-  function chooseEngine(engine: SettingsType['aiEngine']) {
-    set({ aiEngine: engine })
-    if (engine === 'local') ensureLocalEngine(activePack.localModelId).catch(() => {})
-  }
 
   function choosePack(pack: CharacterPack) {
-    const previous = activePack
     set({ activePackId: pack.id })
-    if (settings.aiEngine === 'local') {
-      switchActiveLocalModel(pack.localModelId, previous.localModelId).catch(() => {})
-    }
   }
 
-  async function handleRemoveDownload(pack: CharacterPack) {
-    await removeDownloadedModel(pack.localModelId)
-    setDownloaded((d) => ({ ...d, [pack.id]: false }))
+  function handleDownload() {
+    switchActiveLocalModel(activePack.localModelId, previousLoadedModelId).catch(() => {})
+  }
+
+  async function handleRemoveDownload() {
+    await removeDownloadedModel(activePack.localModelId)
+    setDownloaded(false)
   }
 
   return (
@@ -306,48 +208,14 @@ export default function Settings() {
         </div>
       </div>
 
-      {/* AI Engine */}
-      <div className="card mt-4 p-5">
-        <p className="font-medium text-ink">{t('settings.engine.title')}</p>
-        <p className="mb-3 text-sm text-muted">{t('settings.engine.desc')}</p>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <EngineCard
-            active={settings.aiEngine === 'cloud'}
-            icon={<Cloud size={18} />}
-            title={t('settings.engine.cloud.title')}
-            desc={t('settings.engine.cloud.desc')}
-            onClick={() => chooseEngine('cloud')}
-          />
-          <EngineCard
-            active={settings.aiEngine === 'local'}
-            disabled={!gpuOk}
-            icon={<Cpu size={18} />}
-            title={t('settings.engine.local.title')}
-            desc={
-              gpuOk
-                ? `${activePack.localModelLabel} — ~${activePack.vramHintGB}GB.`
-                : t('settings.engine.local.desc.unsupported')
-            }
-            onClick={() => chooseEngine('local')}
-          />
+      {!gpuOk && (
+        <div className="card mt-4 flex items-start gap-3 border-clay/30 p-5">
+          <AlertTriangle size={20} className="mt-0.5 shrink-0 text-clay" />
+          <p className="text-sm leading-relaxed text-clay">{t('settings.packs.gpuRequired')}</p>
         </div>
+      )}
 
-        {settings.aiEngine === 'local' && !gpuOk && (
-          <p className="mt-3 flex items-start gap-2 text-xs text-clay">
-            <AlertTriangle size={14} className="mt-0.5 shrink-0" />
-            {t('settings.engine.local.desc.unsupported')}
-          </p>
-        )}
-
-        {lowMemory && (
-          <p className="mt-3 flex items-start gap-2 text-xs text-muted">
-            <AlertTriangle size={14} className="mt-0.5 shrink-0" />
-            {t('settings.packs.hardwareWarning')}
-          </p>
-        )}
-      </div>
-
-      {/* Companion picker — applies to both cloud and local engines */}
+      {/* Companion picker */}
       <div className="card mt-4 p-5">
         <p className="font-medium text-ink">{t('settings.packs.title')}</p>
         <p className="mb-3 text-sm text-muted">{t('settings.packs.desc')}</p>
@@ -357,13 +225,63 @@ export default function Settings() {
               key={pack.id}
               pack={pack}
               active={settings.activePackId === pack.id}
-              showModelInfo={settings.aiEngine === 'local' && gpuOk}
-              downloaded={downloaded[pack.id]}
               onSelect={() => choosePack(pack)}
-              onRemoveDownload={() => handleRemoveDownload(pack)}
             />
           ))}
         </div>
+
+        {lowMemory && (
+          <p className="mt-3 flex items-start gap-2 text-xs text-muted">
+            <AlertTriangle size={14} className="mt-0.5 shrink-0" />
+            {t('settings.packs.hardwareWarning')}
+          </p>
+        )}
+
+        {/* Single, unified download/status panel for whichever companion is selected above */}
+        {gpuOk && (
+          <div className="mt-4 rounded-2xl border border-ink/8 bg-white/50 p-3.5">
+            {engineState.status === 'loading' && (
+              <div>
+                <div className="flex items-center gap-2 text-sm text-ink/80">
+                  <Loader2 size={14} className="animate-spin text-sage" />
+                  {engineState.text || t('settings.engine.loadingDefault')}
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-ink/10">
+                  <div
+                    className="h-full rounded-full bg-sage transition-all"
+                    style={{ width: `${Math.round(engineState.progress * 100)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+            {engineState.status === 'error' && (
+              <p className="flex items-start gap-2 text-sm text-clay">
+                <AlertTriangle size={15} className="mt-0.5 shrink-0" />
+                {t('settings.engine.errorPrefix')}
+                {engineState.error || 'unknown error'}
+              </p>
+            )}
+            {engineState.status === 'ready' && (
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-sagedeep">{t('settings.engine.ready')}</p>
+                <button
+                  onClick={handleRemoveDownload}
+                  className="inline-flex items-center gap-1 text-xs text-muted hover:text-clay"
+                >
+                  <Trash2 size={12} /> {t('settings.packs.removeDownload')}
+                </button>
+              </div>
+            )}
+            {engineState.status === 'idle' && !downloaded && (
+              <button
+                onClick={handleDownload}
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-sagedeep underline-offset-2 hover:underline"
+              >
+                <Download size={14} /> {t('settings.engine.download')}
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Feature toggles */}
