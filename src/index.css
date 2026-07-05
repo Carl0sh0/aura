@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: radial-gradient(120% 120% at 15% 0%, #faf6ee 0%, #f2ebdd 55%, #ece3d1 100%);
+  color: #2f2a26;
+  min-height: 100vh;
+}
+
+::selection {
+  background: #c97b5a33;
+}
+
+/* Thin, calm scrollbars */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #cabfa8;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* "Reduce motion" setting — calms every animation/transition in the app */
+html.reduce-motion *,
+html.reduce-motion *::before,
+html.reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+.card {
+  background: rgba(255, 253, 248, 0.72);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(120, 110, 90, 0.12);
+  border-radius: 1.5rem;
+  box-shadow: 0 12px 40px -24px rgba(60, 50, 35, 0.35);
+}
