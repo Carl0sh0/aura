@@ -13,7 +13,8 @@ import Routines from './components/Routines'
 import Settings from './components/Settings'
 import CompanionOnboarding from './components/CompanionOnboarding'
 import { useName } from './lib/store'
-import { useSettings } from './lib/settings'
+import { useSettings, useActivePack } from './lib/settings'
+import { ensureLocalEngine, isModelDownloaded, webgpuSupported } from './lib/localEngine'
 import { useLang } from './lib/i18n'
 
 type View = 'today' | 'chat' | 'journal' | 'routines' | 'settings'
@@ -32,11 +33,26 @@ export default function App() {
   const [asking, setAsking] = useState(!name)
   const [draft, setDraft] = useState('')
   const [settings, setSettings] = useSettings()
+  const activePack = useActivePack()
   const { t } = useLang()
 
   useEffect(() => {
     document.documentElement.classList.toggle('reduce-motion', settings.reduceMotion)
   }, [settings.reduceMotion])
+
+  // Prewarm: load the active companion's model into the GPU at app start if its weights
+  // are already cached, so the first message doesn't pay several seconds of load time.
+  // Never triggers a download — only loads what's already on-device.
+  useEffect(() => {
+    if (!settings.hasChosenCompanion || !webgpuSupported()) return
+    let cancelled = false
+    isModelDownloaded(activePack.localModelId).then((downloaded) => {
+      if (!cancelled && downloaded) ensureLocalEngine(activePack.localModelId).catch(() => {})
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [settings.hasChosenCompanion, activePack.localModelId])
 
   // Everything in Aura runs on the chosen companion's model, so this comes before
   // even the name step.

@@ -199,6 +199,12 @@ export async function interruptLocalGeneration(modelId: string): Promise<void> {
  * Streams a chat reply from the local, on-device model. Mirrors the shape
  * of `streamChat` in `api.ts` so callers (Chat.tsx) barely have to branch.
  */
+// How many recent messages to send the model each turn. Prefill (re-reading the prompt +
+// history) dominates per-message latency on phone GPUs, and the full transcript grows
+// without bound — so the model sees a sliding window, while the on-screen history and
+// crisis detection are unaffected. 10 messages ≈ 5 exchanges of working memory.
+const CHAT_HISTORY_WINDOW = 10
+
 export async function localChatStream(
   messages: ChatMessage[],
   context: string,
@@ -211,11 +217,14 @@ export async function localChatStream(
   const last = [...messages].reverse().find((m) => m.role === 'user')
   const crisis = detectCrisis(last?.content)
   const system = buildSystem(context, crisis, personaVoice) + languageDirective(lang)
+  const recent = messages.slice(-CHAT_HISTORY_WINDOW)
 
   const stream = await eng.chat.completions.create({
     stream: true,
-    messages: [{ role: 'system', content: system }, ...messages],
-    max_tokens: 700,
+    messages: [{ role: 'system', content: system }, ...recent],
+    // Short replies are both the persona spec (2-5 short paragraphs) and much faster to
+    // generate on a phone — a lower cap keeps the conversation feeling snappy.
+    max_tokens: 400,
   })
 
   // Streaming version of stripThink() — buffers just enough to detect and swallow a

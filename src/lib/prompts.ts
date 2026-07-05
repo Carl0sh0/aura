@@ -166,9 +166,9 @@ export function isSupportedLang(v: unknown): v is Lang {
   return typeof v === 'string' && (SUPPORTED_LANGS as readonly string[]).includes(v)
 }
 
-// A soft instruction, not a hard override: match the person's own language if
-// they write in something else, otherwise default to the app's language.
+// Deliberately emphatic: small on-device models drift into English when the language
+// instruction is phrased softly, so this is a hard rule with one narrow exception.
 export function languageDirective(lang: Lang): string {
   const name = LANG_NAMES[lang] || LANG_NAMES[DEFAULT_LANG]
-  return `\n\nThe person's app is set to ${name}. Reply in ${name} by default. If they write to you in a different language, reply in that language instead.`
+  return `\n\nIMPORTANT — LANGUAGE: You MUST write your entire reply in ${name}. Never reply in English unless the person themselves is writing to you in English. The only exception: if they write in a different language than ${name}, reply in that language instead.`
 }
