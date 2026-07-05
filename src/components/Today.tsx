@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { ArrowRight, MessageCircleHeart, NotebookPen, Sparkles } from 'lucide-react'
+import { ArrowRight, MessageCircleHeart, NotebookPen, Sparkles, Wind } from 'lucide-react'
 import { useMoods, useName, type Mood } from '../lib/store'
 import { appendSpeech } from '../lib/speech'
 import { useLang } from '../lib/i18n'
 import MicButton from './MicButton'
 import DiaryStreak from './DiaryStreak'
+import CalmSpace from './CalmSpace'
 
 function greetingKey() {
   const h = new Date().getHours()
@@ -43,6 +44,7 @@ export default function Today({ go }: { go: (v: string) => void }) {
   const [note, setNote] = useState('')
   const [picked, setPicked] = useState<number | null>(null)
   const [saved, setSaved] = useState(false)
+  const [calmOpen, setCalmOpen] = useState(false)
   const { t, localeTag } = useLang()
 
   const FACES = ['😔', '😕', '😐', '🙂', '😊']
@@ -142,6 +144,24 @@ export default function Today({ go }: { go: (v: string) => void }) {
           </div>
         )}
       </div>
+
+      {/* A minute of calm — breathing & grounding, no AI, works instantly */}
+      <button
+        onClick={() => setCalmOpen(true)}
+        className="card group mt-5 flex w-full items-center gap-4 p-5 text-left transition hover:border-sage/40"
+      >
+        <div className="relative grid h-12 w-12 shrink-0 place-items-center">
+          <div className="absolute inset-0 rounded-full bg-sage/20 animate-breathe" />
+          <Wind size={20} className="relative text-sagedeep" />
+        </div>
+        <div className="flex-1">
+          <p className="font-display text-lg text-ink">{t('calm.card.title')}</p>
+          <p className="text-sm text-muted">{t('calm.card.desc')}</p>
+        </div>
+        <ArrowRight size={16} className="text-clay opacity-0 transition group-hover:opacity-100" />
+      </button>
+
+      {calmOpen && <CalmSpace onClose={() => setCalmOpen(false)} />}
 
       <div className="mt-5">
         <DiaryStreak />
