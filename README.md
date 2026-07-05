@@ -2,7 +2,7 @@
 
 A calm, private AI wellbeing companion. Check in on how you feel, talk things
 through with an empathetic AI, journal with gentle reflections, and get a small,
-kind daily routine.
+kind daily routine. 
 
 > **Aura is a supportive companion, not a therapist or crisis service.** It
 > encourages professional help and surfaces crisis resources when needed. In an
