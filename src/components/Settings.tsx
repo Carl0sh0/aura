@@ -12,7 +12,7 @@ import {
   Waypoints,
   Wind,
 } from 'lucide-react'
-import { clearAllData, useSettings, type Settings as SettingsType } from '../lib/settings'
+import { clearAllData, exportAllData, useSettings, type Settings as SettingsType } from '../lib/settings'
 import { speechSupported } from '../lib/speech'
 import { useName } from '../lib/store'
 import {
@@ -464,6 +464,20 @@ export default function Settings() {
       <div className="card mt-4 flex items-start gap-3 p-5">
         <ShieldCheck size={20} className="mt-0.5 shrink-0 text-sage" />
         <p className="text-sm leading-relaxed text-muted">{t('settings.privacy')}</p>
+      </div>
+
+      {/* Your data — export */}
+      <div className="card mt-4 flex items-center justify-between p-5">
+        <div>
+          <p className="font-medium text-ink">{t('settings.export.title')}</p>
+          <p className="text-sm text-muted">{t('settings.export.desc')}</p>
+        </div>
+        <button
+          onClick={exportAllData}
+          className="inline-flex items-center gap-2 rounded-full border border-sage/40 px-4 py-2 text-sm font-medium text-sagedeep transition hover:bg-sage/10"
+        >
+          <Download size={15} /> {t('settings.export.button')}
+        </button>
       </div>
 
       {/* Danger zone */}

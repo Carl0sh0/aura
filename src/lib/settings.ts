@@ -50,6 +50,41 @@ export function useActiveVoiceHint(): VoiceHint {
   return useActivePack().ttsVoiceHint
 }
 
+// Everything Aura stores, as one portable JSON download. The complement of the
+// privacy promise: the data never leaves the device — but it's also always yours
+// to take with you.
+export function exportAllData() {
+  const keys = [
+    'aura.moods',
+    'aura.journal',
+    'aura.routine',
+    'aura.chat',
+    'aura.name',
+    'aura.diary',
+    'aura.settings',
+    'aura.lang',
+  ]
+  const data: Record<string, unknown> = {
+    exportedAt: new Date().toISOString(),
+    app: 'Aura',
+  }
+  for (const k of keys) {
+    try {
+      const raw = localStorage.getItem(k)
+      if (raw != null) data[k.replace('aura.', '')] = JSON.parse(raw)
+    } catch {
+      // skip unparseable entries rather than failing the whole export
+    }
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `aura-data-${new Date().toISOString().slice(0, 10)}.json`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 // Wipe every trace of the user's data from this device.
 export function clearAllData() {
   ;[
