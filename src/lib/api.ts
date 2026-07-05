@@ -2,7 +2,7 @@
 // on-device WebLLM engine (src/lib/localEngine.ts) — nothing leaves the device.
 import type { ChatMessage, Habit } from './store'
 import type { Lang } from './prompts'
-import { localChatStream, localReflect, localRoutine } from './localEngine'
+import { interruptLocalGeneration, localChatStream, localReflect, localRoutine } from './localEngine'
 import { CHARACTER_PACKS, DEFAULT_PACK_ID, type CharacterPack } from './characterPacks'
 
 export type ChatResult = { crisis: boolean }
@@ -20,6 +20,11 @@ export async function streamChat(
   { lang, pack = CHARACTER_PACKS[DEFAULT_PACK_ID] }: StreamChatOptions = {},
 ): Promise<ChatResult> {
   return localChatStream(messages, context, onToken, lang, pack.localModelId, pack.personaVoice)
+}
+
+/** Stops an in-flight chat generation for the given pack's model (a "stop generating" action). */
+export function stopGenerating(pack: CharacterPack = CHARACTER_PACKS[DEFAULT_PACK_ID]): Promise<void> {
+  return interruptLocalGeneration(pack.localModelId)
 }
 
 export async function reflect(

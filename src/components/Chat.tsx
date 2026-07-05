@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Send, Loader2 } from 'lucide-react'
-import { streamChat } from '../lib/api'
+import { Send, Loader2, Square } from 'lucide-react'
+import { streamChat, stopGenerating } from '../lib/api'
 import { appendSpeech } from '../lib/speech'
 import { useSpeaker } from '../lib/tts'
 import { useSettings, useActivePack, useActiveVoiceHint } from '../lib/settings'
@@ -31,6 +31,7 @@ export default function Chat() {
   const speaker = useSpeaker()
   const { t, lang } = useLang()
   const scrollRef = useRef<HTMLDivElement>(null)
+  const stoppedRef = useRef(false)
 
   const STARTERS = [
     t('chat.starter.1'),
@@ -50,6 +51,7 @@ export default function Chat() {
     const next: ChatMessage[] = [...messages, { role: 'user', content }]
     setMessages([...next, { role: 'assistant', content: '' }])
     setBusy(true)
+    stoppedRef.current = false
     let full = ''
     try {
       const context = buildContext(moods, entries, name)
@@ -75,14 +77,23 @@ export default function Chat() {
         speaker.speak('chat-latest', full, undefined, voiceHint)
       }
     } catch {
-      setMessages((prev) => {
-        const copy = [...prev]
-        copy[copy.length - 1] = { role: 'assistant', content: t('chat.error') }
-        return copy
-      })
+      // A deliberate stop keeps whatever partial reply already streamed in rather
+      // than overwriting it with an error message.
+      if (!stoppedRef.current) {
+        setMessages((prev) => {
+          const copy = [...prev]
+          copy[copy.length - 1] = { role: 'assistant', content: t('chat.error') }
+          return copy
+        })
+      }
     } finally {
       setBusy(false)
     }
+  }
+
+  function stop() {
+    stoppedRef.current = true
+    stopGenerating(pack).catch(() => {})
   }
 
   return (
@@ -176,12 +187,13 @@ export default function Chat() {
           className="h-[52px] w-[52px]"
         />
         <button
-          type="submit"
-          disabled={busy || !input.trim()}
+          type={busy ? 'button' : 'submit'}
+          onClick={busy ? stop : undefined}
+          disabled={!busy && !input.trim()}
           className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-2xl bg-clay text-white transition hover:opacity-90 disabled:opacity-40"
-          aria-label="Send"
+          aria-label={busy ? t('chat.stop') : 'Send'}
         >
-          {busy ? <Loader2 className="animate-spin" size={20} /> : <Send size={20} />}
+          {busy ? <Square size={16} fill="currentColor" /> : <Send size={20} />}
         </button>
       </form>
       <p className="mt-2 text-center text-xs text-muted">{t('chat.disclaimer')}</p>

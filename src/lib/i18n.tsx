@@ -90,6 +90,7 @@ const es: Dict = {
   'chat.disclaimer':
     'Aura ofrece apoyo, no atención médica ni de crisis. En una emergencia, llama a tu número de emergencias local.',
   'chat.error': 'Estoy teniendo problemas para responder ahora mismo. Inténtalo de nuevo en un momento.',
+  'chat.stop': 'Detener',
 
   'journal.title': 'Diario',
   'journal.subtitle':
@@ -232,6 +233,7 @@ const en: Dict = {
   'chat.disclaimer':
     'Aura offers support, not medical or crisis care. In an emergency, call your local emergency number.',
   'chat.error': "I'm having trouble responding just now. Please try again in a moment.",
+  'chat.stop': 'Stop',
 
   'journal.title': 'Journal',
   'journal.subtitle':
@@ -374,6 +376,7 @@ const fr: Dict = {
   'chat.disclaimer':
     "Aura offre un soutien, pas une prise en charge médicale ou de crise. En cas d'urgence, appelez votre numéro d'urgence local.",
   'chat.error': "J'ai du mal à répondre pour le moment. Réessayez dans un instant.",
+  'chat.stop': 'Arrêter',
 
   'journal.title': 'Journal',
   'journal.subtitle':
@@ -516,6 +519,7 @@ const pt: Dict = {
   'chat.disclaimer':
     'O Aura oferece apoio, não cuidados médicos ou de crise. Em caso de emergência, liga para o teu número de emergência local.',
   'chat.error': 'Estou com dificuldade em responder agora. Tenta novamente daqui a pouco.',
+  'chat.stop': 'Parar',
 
   'journal.title': 'Diário',
   'journal.subtitle':
@@ -657,6 +661,7 @@ const de: Dict = {
   'chat.disclaimer':
     'Aura bietet Unterstützung, keine medizinische oder Krisenversorgung. Wähle im Notfall deine lokale Notrufnummer.',
   'chat.error': 'Ich habe gerade Schwierigkeiten zu antworten. Bitte versuch es gleich noch einmal.',
+  'chat.stop': 'Stopp',
 
   'journal.title': 'Tagebuch',
   'journal.subtitle':

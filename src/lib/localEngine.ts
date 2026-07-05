@@ -164,6 +164,17 @@ export function isLocalEngineReady(modelId: string) {
   return entries.get(modelId)?.status === 'ready'
 }
 
+/** Interrupts an in-flight generation for the given model, if one is running (a "stop" action). */
+export async function interruptLocalGeneration(modelId: string): Promise<void> {
+  const eng = engines.get(modelId)
+  if (!eng) return
+  try {
+    await eng.interruptGenerate()
+  } catch {
+    // best-effort
+  }
+}
+
 /**
  * Streams a chat reply from the local, on-device model. Mirrors the shape
  * of `streamChat` in `api.ts` so callers (Chat.tsx) barely have to branch.
