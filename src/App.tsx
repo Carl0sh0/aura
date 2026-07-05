@@ -5,11 +5,13 @@ import {
   NotebookPen,
   Settings as SettingsIcon,
   Sparkles,
+  Wind,
 } from 'lucide-react'
 import Today from './components/Today'
 import Chat from './components/Chat'
 import Journal from './components/Journal'
 import Routines from './components/Routines'
+import CalmSpace from './components/CalmSpace'
 import Settings from './components/Settings'
 import CompanionOnboarding from './components/CompanionOnboarding'
 import GoogleSignInButton from './components/GoogleSignInButton'
@@ -19,13 +21,14 @@ import { useSettings, useActivePack } from './lib/settings'
 import { ensureLocalEngine, isModelDownloaded, webgpuSupported } from './lib/localEngine'
 import { useLang } from './lib/i18n'
 
-type View = 'today' | 'chat' | 'journal' | 'routines' | 'settings'
+type View = 'today' | 'chat' | 'journal' | 'routines' | 'calm' | 'settings'
 
 const NAV: { id: View; labelKey: string; icon: typeof Home }[] = [
   { id: 'today', labelKey: 'nav.today', icon: Home },
   { id: 'chat', labelKey: 'nav.talk', icon: MessageCircleHeart },
   { id: 'journal', labelKey: 'nav.journal', icon: NotebookPen },
   { id: 'routines', labelKey: 'nav.plan', icon: Sparkles },
+  { id: 'calm', labelKey: 'nav.calm', icon: Wind },
   { id: 'settings', labelKey: 'nav.settings', icon: SettingsIcon },
 ]
 
@@ -153,6 +156,7 @@ export default function App() {
           {view === 'chat' && <Chat />}
           {view === 'journal' && <Journal />}
           {view === 'routines' && <Routines />}
+          {view === 'calm' && <CalmSpace />}
           {view === 'settings' && <Settings />}
         </div>
       </main>

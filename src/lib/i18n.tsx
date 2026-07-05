@@ -46,6 +46,7 @@ const es: Dict = {
   'nav.journal': 'Diario',
   'nav.plan': 'Plan',
   'nav.settings': 'Ajustes',
+  'nav.calm': 'Calma',
 
   'welcome.title': 'Bienvenido a Aura',
   'welcome.desc':
@@ -239,6 +240,7 @@ const en: Dict = {
   'nav.journal': 'Journal',
   'nav.plan': 'Plan',
   'nav.settings': 'Settings',
+  'nav.calm': 'Calm',
 
   'welcome.title': 'Welcome to Aura',
   'welcome.desc':
@@ -432,6 +434,7 @@ const fr: Dict = {
   'nav.journal': 'Journal',
   'nav.plan': 'Plan',
   'nav.settings': 'Réglages',
+  'nav.calm': 'Calme',
 
   'welcome.title': 'Bienvenue sur Aura',
   'welcome.desc':
@@ -625,6 +628,7 @@ const pt: Dict = {
   'nav.journal': 'Diário',
   'nav.plan': 'Plano',
   'nav.settings': 'Definições',
+  'nav.calm': 'Calma',
 
   'welcome.title': 'Bem-vindo ao Aura',
   'welcome.desc':
@@ -817,6 +821,7 @@ const de: Dict = {
   'nav.journal': 'Tagebuch',
   'nav.plan': 'Plan',
   'nav.settings': 'Einstellungen',
+  'nav.calm': 'Ruhe',
 
   'welcome.title': 'Willkommen bei Aura',
   'welcome.desc':

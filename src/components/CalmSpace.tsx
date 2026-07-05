@@ -157,49 +157,51 @@ function StepsPlayer({ ex, onClose }: { ex: StepsExercise; onClose: () => void }
   )
 }
 
-export default function CalmSpace({ onClose }: { onClose: () => void }) {
+export default function CalmSpace() {
   const { t } = useLang()
   const [active, setActive] = useState<CalmExercise | null>(null)
 
-  // Esc closes; lock body scroll while open.
+  // Esc exits the current exercise back to the list.
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setActive(null)
     window.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
-    return () => {
-      window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [onClose])
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-cream/95 backdrop-blur-sm animate-rise">
-      <div className="flex items-center justify-between px-5 py-4">
-        <button
-          onClick={() => (active ? setActive(null) : onClose())}
-          className="grid h-10 w-10 place-items-center rounded-full text-muted transition hover:bg-white/70 hover:text-ink"
-          aria-label={t('calm.close')}
-        >
-          <X size={20} />
-        </button>
-        <p className="font-display text-lg text-sagedeep">{t('calm.title')}</p>
-        <div className="w-10" />
-      </div>
+    <div className="mx-auto flex min-h-full max-w-2xl flex-col">
+      <header className="mb-4 flex items-start justify-between">
+        <div>
+          <h1 className="font-display text-3xl text-ink">{t('calm.title')}</h1>
+          <p className="text-sm text-muted">{t('calm.card.desc')}</p>
+        </div>
+        {active && (
+          <button
+            onClick={() => setActive(null)}
+            className="grid h-10 w-10 place-items-center rounded-full text-muted transition hover:bg-white/70 hover:text-ink"
+            aria-label={t('calm.close')}
+          >
+            <X size={20} />
+          </button>
+        )}
+      </header>
 
       {active ? (
-        active.kind === 'breath' ? (
-          <BreathPlayer ex={active} onClose={() => setActive(null)} />
-        ) : (
-          <StepsPlayer ex={active} onClose={() => setActive(null)} />
-        )
+        <div className="card flex flex-1 flex-col p-6" style={{ minHeight: '60vh' }}>
+          {active.kind === 'breath' ? (
+            <BreathPlayer ex={active} onClose={() => setActive(null)} />
+          ) : (
+            <StepsPlayer ex={active} onClose={() => setActive(null)} />
+          )}
+        </div>
       ) : (
-        <div className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center gap-3 p-6">
-          <p className="mb-1 text-center text-sm text-muted">{t('calm.pick')}</p>
+        <div className="flex flex-col gap-3">
+          <p className="mb-1 text-sm text-muted">{t('calm.pick')}</p>
           {CALM_EXERCISES.map((ex) => (
             <button
               key={ex.id}
               onClick={() => setActive(ex)}
-              className="card group flex items-center gap-4 p-5 text-left transition hover:border-sage/40"
+              className="card group flex items-center gap-4 p-5 text-left transition hover:border-sage/40 animate-rise"
             >
               <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-sage/15 text-2xl">
                 {ex.glyph}
