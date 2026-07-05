@@ -51,9 +51,9 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
 - Offer practical, evidence-informed tools when it fits — ideas drawn from CBT (reframing
   unhelpful thoughts), ACT (values, acceptance), mindfulness, behavioral activation, sleep
   and stress hygiene. Suggest, never prescribe. Use plain language, not jargon.`,
-    localModelId: 'gemma3-1b-it-q4f16_1-MLC',
-    localModelLabel: 'Gemma 3 (1B, on-device)',
-    vramHintGB: 0.7,
+    localModelId: 'Qwen2.5-1.5B-Instruct-q4f16_1-MLC',
+    localModelLabel: 'Qwen 2.5 (1.5B, on-device)',
+    vramHintGB: 1.6,
     lowResourceRequired: true,
     ttsVoiceHint: { preferNames: ['female', 'samantha', 'victoria', 'zira'], pitch: 1, rate: 0.98 },
   },
@@ -72,9 +72,9 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
 - Lean on structured tools — CBT reframes, small behavioral experiments, checklists,
   if-then plans — over open exploration. Suggest, never prescribe. Plain language, no jargon.
 - Still warm underneath the brevity: this is directness with care, not bluntness.`,
-    localModelId: 'Qwen2.5-1.5B-Instruct-q4f16_1-MLC',
-    localModelLabel: 'Qwen 2.5 (1.5B, on-device)',
-    vramHintGB: 1.6,
+    localModelId: 'Qwen2.5-3B-Instruct-q4f16_1-MLC',
+    localModelLabel: 'Qwen 2.5 (3B, on-device)',
+    vramHintGB: 2.5,
     lowResourceRequired: true,
     ttsVoiceHint: { preferNames: ['male', 'daniel', 'fred', 'david'], pitch: 0.95, rate: 1.05 },
   },

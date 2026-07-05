@@ -225,6 +225,10 @@ export async function localChatStream(
     // Short replies are both the persona spec (2-5 short paragraphs) and much faster to
     // generate on a phone — a lower cap keeps the conversation feeling snappy.
     max_tokens: 400,
+    // Small quantized models loop and ramble without an explicit anti-repetition nudge.
+    temperature: 0.7,
+    top_p: 0.9,
+    repetition_penalty: 1.1,
   })
 
   // Streaming version of stripThink() — buffers just enough to detect and swallow a
@@ -294,6 +298,9 @@ export async function localReflect(
       { role: 'user', content: `Mood: ${mood ?? 'unspecified'}\n\nJournal entry:\n${entry}` },
     ],
     max_tokens: 300,
+    temperature: 0.7,
+    top_p: 0.9,
+    repetition_penalty: 1.1,
   })
   const reflection = stripThink(res.choices?.[0]?.message?.content || '')
   return { reflection, crisis }
@@ -355,6 +362,10 @@ export async function localRoutine(
       },
     ],
     max_tokens: 600,
+    // Lower temperature for the JSON-shaped output; same anti-loop guard.
+    temperature: 0.4,
+    top_p: 0.9,
+    repetition_penalty: 1.1,
   })
   const text = stripThink(res.choices?.[0]?.message?.content || '{}')
   return parseRoutineJson(text, lang)
