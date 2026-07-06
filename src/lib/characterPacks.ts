@@ -118,10 +118,14 @@ export const CHARACTER_PACKS: Record<PackId, CharacterPack> = {
 - Offer practical, evidence-informed tools when it fits — ideas drawn from CBT (reframing
   unhelpful thoughts), ACT (values, acceptance), mindfulness, behavioral activation, sleep
   and stress hygiene. Suggest, never prescribe. Use plain language, not jargon.`,
-    localModelId: 'Qwen3.5-2B-q4f16_1-MLC',
-    localModelLabel: 'Qwen 3.5 (2B, on-device)',
-    vramHintGB: 2.2,
-    lowResourceRequired: false,
+    // Smallest catalog model — this is the pack every brand-new visitor starts on
+    // (no onboarding gate, see App.tsx), so it's optimized for "downloads fast and
+    // definitely runs," not peak quality. Settings lets anyone switch to a bigger
+    // model per pack once they're already invested.
+    localModelId: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',
+    localModelLabel: 'Llama 3.2 (1B, on-device)',
+    vramHintGB: 1.1,
+    lowResourceRequired: true,
     ttsVoiceHint: { preferNames: ['female', 'sonia', 'libby', 'serena', 'samantha'], pitch: 1, rate: 0.98 },
   },
   grounded: {

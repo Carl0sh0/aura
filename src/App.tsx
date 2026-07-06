@@ -16,7 +16,6 @@ import Routines from './components/Routines'
 import CalmSpace from './components/CalmSpace'
 import Insights from './components/Insights'
 import Settings from './components/Settings'
-import CompanionOnboarding from './components/CompanionOnboarding'
 import GoogleSignInButton from './components/GoogleSignInButton'
 import { googleSignInAvailable } from './lib/auth'
 import { useName } from './lib/store'
@@ -50,7 +49,7 @@ export default function App() {
   const [name, setName] = useName()
   const [asking, setAsking] = useState(!name)
   const [draft, setDraft] = useState('')
-  const [settings, setSettings] = useSettings()
+  const [settings] = useSettings()
   const activePack = useActivePack()
   const { t } = useLang()
 
@@ -119,7 +118,7 @@ export default function App() {
   // Never triggers a download — only loads what's already on-device.
   const activeModelId = useModelIdForPack(activePack.id)
   useEffect(() => {
-    if (!settings.hasChosenCompanion || !webgpuSupported()) return
+    if (!webgpuSupported()) return
     let cancelled = false
     isModelDownloaded(activeModelId).then((downloaded) => {
       if (!cancelled && downloaded) ensureLocalEngine(activeModelId).catch(() => {})
@@ -127,15 +126,7 @@ export default function App() {
     return () => {
       cancelled = true
     }
-  }, [settings.hasChosenCompanion, activeModelId])
-
-  // Everything in Aura runs on the chosen companion's model, so this comes before
-  // even the name step.
-  if (!settings.hasChosenCompanion) {
-    return (
-      <CompanionOnboarding onDone={() => setSettings((s) => ({ ...s, hasChosenCompanion: true }))} />
-    )
-  }
+  }, [activeModelId])
 
   if (asking && !name) {
     return (

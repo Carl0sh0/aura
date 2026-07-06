@@ -10,7 +10,6 @@ export type Settings = {
   autoRead: boolean // automatically speak Aura's chat replies
   reduceMotion: boolean // calm the animations
   activePackId: PackId // which on-device companion persona/pack is active
-  hasChosenCompanion: boolean // whether the user has been through the companion picker
   modelOverrides: Record<PackId, string> // override models for packs
   theme: 'light' | 'dark' | 'system' // theme selection
   soundEffects: boolean // play satisfying meditative chimes
@@ -26,9 +25,14 @@ export const DEFAULT_SETTINGS: Settings = {
   autoRead: false,
   reduceMotion: false,
   activePackId: DEFAULT_PACK_ID,
-  hasChosenCompanion: false,
+  // The default (calm) pack starts on the smallest catalog model — brand-new visitors
+  // get straight into the app with no onboarding gate (see App.tsx), so whatever they
+  // download first should be the fastest download and the safest bet to run well on
+  // whatever device they showed up on. Bigger/more capable models are one tap away in
+  // Settings for anyone who wants them; existing users' own choices are unaffected —
+  // this only changes what a *new* localStorage starts with.
   modelOverrides: {
-    calm: 'Qwen3.5-2B-q4f16_1-MLC',
+    calm: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',
     grounded: 'Qwen3.5-4B-q4f16_1-MLC',
     reflective: 'Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC',
   },
