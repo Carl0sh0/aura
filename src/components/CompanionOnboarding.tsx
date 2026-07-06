@@ -3,6 +3,7 @@ import { AlertTriangle, ArrowRight, RefreshCw } from 'lucide-react'
 import { CHARACTER_PACKS, DEFAULT_PACK_ID } from '../lib/characterPacks'
 import { useSettings, useModelIdForPack, type Settings as SettingsType } from '../lib/settings'
 import { switchActiveLocalModel, useLocalEngineState, webgpuSupported } from '../lib/localEngine'
+import { isLikelyMeteredConnection } from '../lib/network'
 import { useName } from '../lib/store'
 import { googleSignInAvailable } from '../lib/auth'
 import { useLang } from '../lib/i18n'
@@ -52,6 +53,10 @@ export default function CompanionOnboarding({ onDone }: { onDone: () => void }) 
     if (!gpuOk) {
       onDone()
       return
+    }
+    if (isLikelyMeteredConnection()) {
+      const ok = confirm(t('download.meteredWarning', { size: activePack.vramHintGB }))
+      if (!ok) return
     }
     setStep('download')
     switchActiveLocalModel(activeModelId).catch(() => {})

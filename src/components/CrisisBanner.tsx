@@ -1,10 +1,12 @@
 import { LifeBuoy, Phone, X } from 'lucide-react'
 import { useLang } from '../lib/i18n'
+import { localEmergencyNumber } from '../lib/emergency'
 
 // Shown whenever the app detects language suggesting acute distress. It never
 // blocks the conversation — it sits alongside it, offering real, human help.
 export default function CrisisBanner({ onClose }: { onClose?: () => void }) {
   const { t } = useLang()
+  const emergencyNumber = localEmergencyNumber()
   return (
     <div className="rounded-2xl border border-clay/40 bg-clay/10 p-4 sm:p-5 text-ink animate-rise">
       <div className="flex items-start gap-3">
@@ -21,12 +23,18 @@ export default function CrisisBanner({ onClose }: { onClose?: () => void }) {
             >
               <Phone size={15} /> {t('crisis.call988')}
             </a>
-            <a
-              href="tel:911"
-              className="inline-flex items-center gap-2 rounded-full border border-clay/40 px-4 py-2 font-medium text-clay transition hover:bg-clay/10"
-            >
-              {t('crisis.emergency')}
-            </a>
+            {emergencyNumber ? (
+              <a
+                href={`tel:${emergencyNumber}`}
+                className="inline-flex items-center gap-2 rounded-full border border-clay/40 px-4 py-2 font-medium text-clay transition hover:bg-clay/10"
+              >
+                {t('crisis.emergency')} {emergencyNumber}
+              </a>
+            ) : (
+              <span className="inline-flex items-center gap-2 rounded-full border border-clay/40 px-4 py-2 font-medium text-clay">
+                {t('crisis.emergencyGeneric')}
+              </span>
+            )}
             <a
               href="https://findahelpline.com"
               target="_blank"

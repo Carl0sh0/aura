@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import {
+  Activity,
   Home,
   MessageCircleHeart,
   NotebookPen,
@@ -7,11 +8,13 @@ import {
   Sparkles,
   Wind,
 } from 'lucide-react'
+import AdminDashboard from './components/AdminDashboard'
 import Today from './components/Today'
 import Chat from './components/Chat'
 import Journal from './components/Journal'
 import Routines from './components/Routines'
 import CalmSpace from './components/CalmSpace'
+import Insights from './components/Insights'
 import Settings from './components/Settings'
 import CompanionOnboarding from './components/CompanionOnboarding'
 import GoogleSignInButton from './components/GoogleSignInButton'
@@ -21,8 +24,9 @@ import { useSettings, useActivePack, useModelIdForPack } from './lib/settings'
 import { ensureLocalEngine, isModelDownloaded, webgpuSupported } from './lib/localEngine'
 import { useLang } from './lib/i18n'
 import { playIntroChime, playNavChime } from './lib/chime'
+import { flushSessionDuration, resumeSessionTimer, trackFeature, trackPageview } from './lib/analytics'
 
-type View = 'today' | 'chat' | 'journal' | 'routines' | 'calm' | 'settings'
+type View = 'today' | 'chat' | 'journal' | 'routines' | 'calm' | 'insights' | 'settings'
 
 const NAV: { id: View; labelKey: string; icon: typeof Home }[] = [
   { id: 'today', labelKey: 'nav.today', icon: Home },
@@ -30,10 +34,18 @@ const NAV: { id: View; labelKey: string; icon: typeof Home }[] = [
   { id: 'journal', labelKey: 'nav.journal', icon: NotebookPen },
   { id: 'routines', labelKey: 'nav.plan', icon: Sparkles },
   { id: 'calm', labelKey: 'nav.calm', icon: Wind },
+  { id: 'insights', labelKey: 'nav.insights', icon: Activity },
   { id: 'settings', labelKey: 'nav.settings', icon: SettingsIcon },
 ]
 
 export default function App() {
+  // Hidden operator-only route, not linked from anywhere in the app. Checked
+  // before any other hook runs — safe because window.location.pathname is
+  // fixed for the lifetime of this mount (no client-side router involved).
+  if (typeof window !== 'undefined' && window.location.pathname === '/admin') {
+    return <AdminDashboard />
+  }
+
   const [view, setView] = useState<View>('today')
   const [name, setName] = useName()
   const [asking, setAsking] = useState(!name)
@@ -49,6 +61,23 @@ export default function App() {
     const stopChime = playIntroChime()
     return () => {
       if (typeof stopChime === 'function') stopChime()
+    }
+  }, [])
+
+  // Aggregate, anonymous usage signal: one pageview beacon, and foreground-time
+  // beacons flushed whenever the tab is hidden/closed (see src/lib/analytics.ts
+  // for why this only ever sends totals, never per-visitor identifiers).
+  useEffect(() => {
+    trackPageview()
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') flushSessionDuration()
+      else resumeSessionTimer()
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    window.addEventListener('pagehide', flushSessionDuration)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility)
+      window.removeEventListener('pagehide', flushSessionDuration)
     }
   }, [])
 
@@ -175,7 +204,10 @@ export default function App() {
         {NAV.map(({ id, labelKey, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => setView(id)}
+            onClick={() => {
+              setView(id)
+              trackFeature(id)
+            }}
             className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm transition ${
               view === id
                 ? 'bg-white/80 font-medium text-ink shadow-sm'
@@ -198,6 +230,7 @@ export default function App() {
           {view === 'journal' && <Journal />}
           {view === 'routines' && <Routines />}
           {view === 'calm' && <CalmSpace />}
+          {view === 'insights' && <Insights />}
           {view === 'settings' && <Settings />}
         </div>
       </main>
@@ -207,7 +240,10 @@ export default function App() {
         {NAV.map(({ id, labelKey, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => setView(id)}
+            onClick={() => {
+              setView(id)
+              trackFeature(id)
+            }}
             className={`flex flex-1 flex-col items-center gap-1 rounded-xl py-1.5 text-[11px] transition ${
               view === id ? 'text-clay' : 'text-muted'
             }`}

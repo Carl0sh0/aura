@@ -10,14 +10,18 @@
   },
   "dependencies": {
     "@mlc-ai/web-llm": "^0.2.84",
+    "@upstash/redis": "^1.38.0",
     "framer-motion": "^11.11.17",
     "lucide-react": "^0.454.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@types/web-push": "^3.6.4",
+    "@vercel/node": "^5.8.22",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",

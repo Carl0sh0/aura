@@ -27,6 +27,19 @@ export function googleSignInAvailable() {
   return !!GOOGLE_CLIENT_ID
 }
 
+// The raw ID token from the most recent sign-in, kept in memory only (never
+// persisted — it expires in about an hour anyway) so features that need to
+// prove identity to the backend (encrypted backup) can use it without a
+// second round-trip through Google. Resets on page reload by design; the
+// backup UI re-prompts sign-in when it finds none.
+let latestIdToken: string | null = null
+export function getLatestIdToken(): string | null {
+  return latestIdToken
+}
+export function setLatestIdToken(token: string | null) {
+  latestIdToken = token
+}
+
 export function emailCaptureAvailable() {
   return !!SUBSCRIBE_ENDPOINT
 }

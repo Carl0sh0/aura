@@ -14,6 +14,10 @@ export type Settings = {
   modelOverrides: Record<PackId, string> // override models for packs
   theme: 'light' | 'dark' | 'system' // theme selection
   soundEffects: boolean // play satisfying meditative chimes
+  reminderEnabled: boolean // daily push reminder (see src/lib/push.ts)
+  reminderHour: number // 0-23, local time
+  reminderMinute: number // 0-59, local time
+  backupUpdatedAt: string | null // ISO date of the last successful encrypted backup, or null
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -30,6 +34,10 @@ export const DEFAULT_SETTINGS: Settings = {
   },
   theme: 'system',
   soundEffects: true,
+  reminderEnabled: false,
+  reminderHour: 20,
+  reminderMinute: 0,
+  backupUpdatedAt: null,
 }
 
 // Merges with defaults so a settings object saved before a new field existed
@@ -82,25 +90,29 @@ export function useActiveVoiceHint(): VoiceHint {
   return useActivePack().ttsVoiceHint
 }
 
+// The complete set of localStorage keys that make up a person's Aura data —
+// shared by the JSON export, the encrypted backup (src/lib/backup.ts), and
+// the danger-zone eraser below, so the three stay in sync automatically.
+export const STORAGE_KEYS = [
+  'aura.moods',
+  'aura.journal',
+  'aura.routine',
+  'aura.chat',
+  'aura.name',
+  'aura.diary',
+  'aura.settings',
+  'aura.lang',
+] as const
+
 // Everything Aura stores, as one portable JSON download. The complement of the
 // privacy promise: the data never leaves the device — but it's also always yours
 // to take with you.
 export function exportAllData() {
-  const keys = [
-    'aura.moods',
-    'aura.journal',
-    'aura.routine',
-    'aura.chat',
-    'aura.name',
-    'aura.diary',
-    'aura.settings',
-    'aura.lang',
-  ]
   const data: Record<string, unknown> = {
     exportedAt: new Date().toISOString(),
     app: 'Aura',
   }
-  for (const k of keys) {
+  for (const k of STORAGE_KEYS) {
     try {
       const raw = localStorage.getItem(k)
       if (raw != null) data[k.replace('aura.', '')] = JSON.parse(raw)
@@ -117,18 +129,10 @@ export function exportAllData() {
   URL.revokeObjectURL(url)
 }
 
-// Wipe every trace of the user's data from this device.
+// Wipe every trace of the user's data from this device. Callers should best-effort
+// unsubscribe from push reminders and delete any server-side backup blob first
+// (see Settings.tsx's danger-zone button) — this only touches localStorage.
 export function clearAllData() {
-  ;[
-    'aura.moods',
-    'aura.journal',
-    'aura.routine',
-    'aura.chat',
-    'aura.name',
-    'aura.diary',
-    'aura.settings',
-    'aura.lang',
-    'aura.profile',
-  ].forEach((k) => localStorage.removeItem(k))
+  ;[...STORAGE_KEYS, 'aura.profile', 'aura.pushId', 'aura.visitorId'].forEach((k) => localStorage.removeItem(k))
   location.reload()
 }

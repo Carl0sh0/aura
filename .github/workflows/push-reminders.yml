@@ -1,0 +1,22 @@
+name: Send daily reminder pushes
+
+# Runs every 15 minutes so each subscriber's chosen local reminder time is
+# respected reasonably closely, without needing Vercel's own Cron Jobs
+# (capped at ~once/day on the Hobby plan). The endpoint itself decides who's
+# actually due — this just knocks on the door often enough that nobody's
+# reminder time is missed by more than ~15 minutes.
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call send-reminders endpoint
+        run: |
+          curl --fail --silent --show-error \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "${{ vars.AURA_URL || 'https://aurahelps.vercel.app' }}/api/push/send-reminders"

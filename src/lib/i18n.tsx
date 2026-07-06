@@ -47,6 +47,13 @@ const es: Dict = {
   'nav.plan': 'Plan',
   'nav.settings': 'Ajustes',
   'nav.calm': 'Calma',
+  'nav.insights': 'Historial',
+  'insights.title': 'Progreso e Historial',
+  'insights.subtitle': 'Visualiza tus patrones de ánimo y revive lo que contaste cada día.',
+  'insights.noRecords': 'No registraste nada este día.',
+  'insights.mood': 'Tu estado de ánimo',
+  'insights.diary': 'Resumen del día',
+  'insights.journal': 'Pensamientos del diario',
 
   'welcome.title': 'Bienvenido a Aura',
   'welcome.desc':
@@ -155,6 +162,8 @@ const es: Dict = {
   'settings.engine.ready': '✓ Listo — Aura funcionará por completo en este dispositivo.',
   'settings.engine.errorPrefix': 'No se pudo cargar el modelo local: ',
   'settings.engine.download': 'Descargar modelo para empezar',
+  'download.meteredWarning':
+    'Pareces estar en datos móviles. La descarga pesa ~{{size}}GB y puede consumir tu plan de datos. ¿Continuar de todas formas?',
   'settings.packs.gpuRequired':
     'Este navegador no soporta WebGPU, así que Aura no puede generar respuestas de IA aquí — todo funciona en el dispositivo, sin nube. Prueba un Chrome o Edge reciente.',
   'settings.packs.title': 'Elige tu compañera',
@@ -182,6 +191,24 @@ const es: Dict = {
   'settings.account.subscribeError': 'No se pudo guardar tu correo. Inténtalo de nuevo.',
   'settings.account.privacyNote':
     'Solo usaremos tu correo para novedades de Aura. Tus conversaciones y tu diario nunca salen de tu dispositivo.',
+  'settings.reminder.title': 'Recordatorio diario',
+  'settings.reminder.desc': 'Un aviso a la hora que elijas. Nunca incluye tu nombre ni lo que escribes.',
+  'settings.reminder.unsupported': 'Tu navegador no admite notificaciones.',
+  'settings.backup.title': 'Backup cifrado',
+  'settings.backup.desc':
+    'Guarda una copia cifrada de tu diario y rutinas para recuperarla en otro dispositivo. Ni Aura ni nadie más puede leerla.',
+  'settings.backup.reauth': 'Verifica tu sesión de Google para continuar.',
+  'settings.backup.passphrasePlaceholder': 'Passphrase de backup (mínimo 8 caracteres)',
+  'settings.backup.confirmPlaceholder': 'Repite la passphrase',
+  'settings.backup.warning':
+    'Si olvidas esta passphrase, tu backup queda irrecuperable para siempre — ni siquiera nosotros podemos ayudarte a recuperarla.',
+  'settings.backup.backupNow': 'Hacer backup ahora',
+  'settings.backup.restore': 'Restaurar en este dispositivo',
+  'settings.backup.lastBackup': 'Último backup: {{date}}',
+  'settings.backup.success': '✓ Listo.',
+  'settings.backup.wrongPassphrase': 'Passphrase incorrecta — no se pudo descifrar el backup.',
+  'settings.backup.noBackup': 'Todavía no hay ningún backup guardado.',
+  'settings.backup.error': 'Algo falló. Inténtalo de nuevo.',
   'calm.card.title': 'Un momento de calma',
   'calm.card.desc': 'Respiración guiada y ejercicios para volver al presente — un minuto basta.',
   'calm.title': 'Momento de calma',
@@ -226,7 +253,7 @@ const es: Dict = {
   'settings.toggle.sound.title': 'Efectos de sonido',
   'settings.toggle.sound.desc': 'Reproduce campanas meditativas al realizar acciones.',
   'settings.privacy':
-    'Tus estados de ánimo, diario y rutinas se guardan solo en este navegador; nunca salen de tu dispositivo. Solo el texto que envías activamente a la IA se comparte para generar una respuesta.',
+    'Tus estados de ánimo, diario, rutinas y conversaciones se guardan y se procesan solo en este dispositivo — la IA corre localmente, nada de tu contenido sale nunca a un servidor. Únicas excepciones, y solo si las activas tú: el backup cifrado (ni Aura puede leerlo sin tu passphrase) y el recordatorio diario (que solo envía la hora elegida, nunca contenido).',
   'settings.danger.title': 'Borrar todos mis datos',
   'settings.danger.desc': 'Elimina todo en este dispositivo. No se puede deshacer.',
   'settings.danger.confirm': '¿Borrar todos tus datos de Aura en este dispositivo? Esto no se puede deshacer.',
@@ -236,7 +263,8 @@ const es: Dict = {
   'crisis.body':
     'Aura es un compañero, no un servicio de crisis. Si podrías estar en peligro o pensando en hacerte daño, por favor contacta a alguien que pueda ayudarte de inmediato: no tienes que llevar esto solo/a.',
   'crisis.call988': 'Llama o escribe al 988 (EE. UU.)',
-  'crisis.emergency': 'Emergencias: 911 / 112',
+  'crisis.emergency': 'Emergencias:',
+  'crisis.emergencyGeneric': 'Llama al número de emergencias de tu país',
   'crisis.findLine': 'Encuentra una línea cerca de ti',
 
   'diary.title': 'Diario del día',
@@ -262,6 +290,13 @@ const en: Dict = {
   'nav.plan': 'Plan',
   'nav.settings': 'Settings',
   'nav.calm': 'Calm',
+  'nav.insights': 'History',
+  'insights.title': 'Progress & History',
+  'insights.subtitle': 'Visualize your mood patterns and revisit what you shared each day.',
+  'insights.noRecords': 'No entries recorded for this day.',
+  'insights.mood': 'Your mood',
+  'insights.diary': 'Daily summary',
+  'insights.journal': 'Journal entries',
 
   'welcome.title': 'Welcome to Aura',
   'welcome.desc':
@@ -370,6 +405,8 @@ const en: Dict = {
   'settings.engine.ready': '✓ Ready — Aura will run fully on this device.',
   'settings.engine.errorPrefix': "Couldn't load the local model: ",
   'settings.engine.download': 'Download model to get started',
+  'download.meteredWarning':
+    'You appear to be on mobile data. The download is ~{{size}}GB and may use up your data plan. Continue anyway?',
   'settings.packs.gpuRequired':
     "This browser doesn't support WebGPU, so Aura can't generate AI replies here — everything runs on-device, no cloud. Try a recent Chrome or Edge.",
   'settings.packs.title': 'Choose your companion',
@@ -397,6 +434,24 @@ const en: Dict = {
   'settings.account.subscribeError': "Couldn't save your email. Please try again.",
   'settings.account.privacyNote':
     'We only use your email for Aura updates. Your conversations and journal never leave your device.',
+  'settings.reminder.title': 'Daily reminder',
+  'settings.reminder.desc': 'A nudge at the time you choose. Never includes your name or what you write.',
+  'settings.reminder.unsupported': 'Your browser does not support notifications.',
+  'settings.backup.title': 'Encrypted backup',
+  'settings.backup.desc':
+    'Keep an encrypted copy of your journal and routines to restore on another device. Nobody, not even Aura, can read it.',
+  'settings.backup.reauth': 'Please verify your Google sign-in to continue.',
+  'settings.backup.passphrasePlaceholder': 'Backup passphrase (8+ characters)',
+  'settings.backup.confirmPlaceholder': 'Repeat the passphrase',
+  'settings.backup.warning':
+    "If you forget this passphrase, your backup is unrecoverable forever — not even we can help you get it back.",
+  'settings.backup.backupNow': 'Back up now',
+  'settings.backup.restore': 'Restore on this device',
+  'settings.backup.lastBackup': 'Last backup: {{date}}',
+  'settings.backup.success': '✓ Done.',
+  'settings.backup.wrongPassphrase': "Wrong passphrase — couldn't decrypt the backup.",
+  'settings.backup.noBackup': 'No backup saved yet.',
+  'settings.backup.error': 'Something went wrong. Please try again.',
   'calm.card.title': 'A moment of calm',
   'calm.card.desc': 'Guided breathing and grounding exercises — one minute is enough.',
   'calm.title': 'Moment of calm',
@@ -441,7 +496,7 @@ const en: Dict = {
   'settings.toggle.sound.title': 'Sound effects',
   'settings.toggle.sound.desc': 'Play calm, meditative chimes for actions.',
   'settings.privacy':
-    'Your moods, journal, and routines are stored only in this browser — they never leave your device. Only the text you actively send to the AI is shared to generate a reply.',
+    'Your moods, journal, routines, and conversations are stored and processed entirely on this device — the AI runs locally, and none of your content ever reaches a server. The only exceptions, and only if you turn them on: encrypted backup (not even Aura can read it without your passphrase) and the daily reminder (which only sends the time you chose, never any content).',
   'settings.danger.title': 'Clear all my data',
   'settings.danger.desc': "Erase everything on this device. Can't be undone.",
   'settings.danger.confirm': 'Erase all your Aura data on this device? This cannot be undone.',
@@ -451,7 +506,8 @@ const en: Dict = {
   'crisis.body':
     "Aura is a companion, not a crisis service. If you might be in danger or thinking of harming yourself, please reach out to people who can help immediately — you don't have to carry this alone.",
   'crisis.call988': 'Call or text 988 (US)',
-  'crisis.emergency': 'Emergency: 911 / 112',
+  'crisis.emergency': 'Emergency:',
+  'crisis.emergencyGeneric': "Call your country's local emergency number",
   'crisis.findLine': 'Find a line near you',
 
   'diary.title': 'Daily diary',
@@ -477,6 +533,13 @@ const fr: Dict = {
   'nav.plan': 'Plan',
   'nav.settings': 'Réglages',
   'nav.calm': 'Calme',
+  'nav.insights': 'Historique',
+  'insights.title': 'Progrès et historique',
+  'insights.subtitle': "Visualisez vos tendances d'humeur et retrouvez ce que vous avez partagé chaque jour.",
+  'insights.noRecords': 'Aucune entrée enregistrée ce jour-là.',
+  'insights.mood': 'Votre humeur',
+  'insights.diary': 'Résumé du jour',
+  'insights.journal': 'Notes du journal',
 
   'welcome.title': 'Bienvenue sur Aura',
   'welcome.desc':
@@ -585,6 +648,8 @@ const fr: Dict = {
   'settings.engine.ready': '✓ Prêt — Aura fonctionnera entièrement sur cet appareil.',
   'settings.engine.errorPrefix': "Impossible de charger le modèle local : ",
   'settings.engine.download': 'Télécharger le modèle pour commencer',
+  'download.meteredWarning':
+    'Vous semblez être sur des données mobiles. Le téléchargement pèse environ {{size}}Go et peut consommer votre forfait. Continuer quand même ?',
   'settings.packs.gpuRequired':
     "Ce navigateur ne prend pas en charge WebGPU, donc Aura ne peut pas générer de réponses ici — tout tourne sur l'appareil, sans cloud. Essayez un Chrome ou Edge récent.",
   'settings.packs.title': 'Choisissez votre compagne',
@@ -612,6 +677,25 @@ const fr: Dict = {
   'settings.account.subscribeError': "Impossible d'enregistrer votre e-mail. Réessayez.",
   'settings.account.privacyNote':
     "Votre e-mail ne sert qu'aux nouvelles d'Aura. Vos conversations et votre journal ne quittent jamais votre appareil.",
+  'settings.reminder.title': 'Rappel quotidien',
+  'settings.reminder.desc':
+    "Une notification à l'heure de votre choix. Ne contient jamais votre nom ni ce que vous écrivez.",
+  'settings.reminder.unsupported': 'Votre navigateur ne prend pas en charge les notifications.',
+  'settings.backup.title': 'Sauvegarde chiffrée',
+  'settings.backup.desc':
+    "Gardez une copie chiffrée de votre journal et de vos routines pour la restaurer sur un autre appareil. Personne, pas même Aura, ne peut la lire.",
+  'settings.backup.reauth': 'Veuillez vérifier votre connexion Google pour continuer.',
+  'settings.backup.passphrasePlaceholder': 'Phrase secrète de sauvegarde (8 caractères min.)',
+  'settings.backup.confirmPlaceholder': 'Répétez la phrase secrète',
+  'settings.backup.warning':
+    "Si vous oubliez cette phrase secrète, votre sauvegarde est irrécupérable pour toujours — même nous ne pouvons pas vous aider.",
+  'settings.backup.backupNow': 'Sauvegarder maintenant',
+  'settings.backup.restore': 'Restaurer sur cet appareil',
+  'settings.backup.lastBackup': 'Dernière sauvegarde : {{date}}',
+  'settings.backup.success': '✓ Terminé.',
+  'settings.backup.wrongPassphrase': 'Phrase secrète incorrecte — impossible de déchiffrer la sauvegarde.',
+  'settings.backup.noBackup': 'Aucune sauvegarde enregistrée pour le moment.',
+  'settings.backup.error': "Une erreur s'est produite. Réessayez.",
   'calm.card.title': 'Un moment de calme',
   'calm.card.desc': 'Respiration guidée et ancrage — une minute suffit.',
   'calm.title': 'Moment de calme',
@@ -656,7 +740,7 @@ const fr: Dict = {
   'settings.toggle.sound.title': 'Effets sonores',
   'settings.toggle.sound.desc': 'Jouer des carillons calmes et méditatifs pour les actions.',
   'settings.privacy':
-    "Vos humeurs, votre journal et vos routines ne sont stockés que dans ce navigateur — ils ne quittent jamais votre appareil. Seul le texte que vous envoyez activement à l'IA est partagé pour générer une réponse.",
+    "Vos humeurs, votre journal, vos routines et vos conversations sont stockés et traités uniquement sur cet appareil — l'IA fonctionne localement, aucun contenu n'atteint jamais un serveur. Seules exceptions, et seulement si vous les activez : la sauvegarde chiffrée (même Aura ne peut pas la lire sans votre phrase secrète) et le rappel quotidien (qui n'envoie que l'heure choisie, jamais de contenu).",
   'settings.danger.title': 'Effacer toutes mes données',
   'settings.danger.desc': "Efface tout sur cet appareil. Action irréversible.",
   'settings.danger.confirm': "Effacer toutes vos données Aura sur cet appareil ? Cette action est irréversible.",
@@ -666,7 +750,8 @@ const fr: Dict = {
   'crisis.body':
     "Aura est un compagnon, pas un service de crise. Si vous pourriez être en danger ou penser à vous faire du mal, contactez immédiatement quelqu'un qui peut vous aider — vous n'avez pas à porter cela seul(e).",
   'crisis.call988': 'Appelez ou écrivez au 988 (États-Unis)',
-  'crisis.emergency': 'Urgences : 15 / 112',
+  'crisis.emergency': 'Urgences :',
+  'crisis.emergencyGeneric': "Appelez le numéro d'urgence de votre pays",
   'crisis.findLine': "Trouver une ligne près de chez vous",
 
   'diary.title': 'Journal du jour',
@@ -692,6 +777,13 @@ const pt: Dict = {
   'nav.plan': 'Plano',
   'nav.settings': 'Definições',
   'nav.calm': 'Calma',
+  'nav.insights': 'Histórico',
+  'insights.title': 'Progresso e histórico',
+  'insights.subtitle': 'Visualiza os teus padrões de humor e revê o que partilhaste em cada dia.',
+  'insights.noRecords': 'Não há registos para este dia.',
+  'insights.mood': 'O teu estado de espírito',
+  'insights.diary': 'Resumo do dia',
+  'insights.journal': 'Notas do diário',
 
   'welcome.title': 'Bem-vindo ao Aura',
   'welcome.desc':
@@ -799,6 +891,8 @@ const pt: Dict = {
   'settings.engine.ready': '✓ Pronto — o Aura vai correr inteiramente neste dispositivo.',
   'settings.engine.errorPrefix': 'Não foi possível carregar o modelo local: ',
   'settings.engine.download': 'Transferir modelo para começar',
+  'download.meteredWarning':
+    'Pareces estar em dados móveis. A transferência pesa ~{{size}}GB e pode consumir o teu plano de dados. Continuar mesmo assim?',
   'settings.packs.gpuRequired':
     'Este navegador não suporta WebGPU, por isso o Aura não consegue gerar respostas aqui — tudo corre no dispositivo, sem nuvem. Experimenta um Chrome ou Edge recente.',
   'settings.packs.title': 'Escolhe a tua companheira',
@@ -826,6 +920,24 @@ const pt: Dict = {
   'settings.account.subscribeError': 'Não foi possível guardar o teu e-mail. Tenta novamente.',
   'settings.account.privacyNote':
     'Só usamos o teu e-mail para novidades do Aura. As tuas conversas e o teu diário nunca saem do teu dispositivo.',
+  'settings.reminder.title': 'Lembrete diário',
+  'settings.reminder.desc': 'Um aviso à hora que escolheres. Nunca inclui o teu nome nem o que escreves.',
+  'settings.reminder.unsupported': 'O teu navegador não suporta notificações.',
+  'settings.backup.title': 'Backup cifrado',
+  'settings.backup.desc':
+    'Guarda uma cópia cifrada do teu diário e rotinas para restaurar noutro dispositivo. Ninguém, nem o Aura, consegue lê-la.',
+  'settings.backup.reauth': 'Verifica a tua sessão Google para continuar.',
+  'settings.backup.passphrasePlaceholder': 'Frase-passe de backup (mín. 8 caracteres)',
+  'settings.backup.confirmPlaceholder': 'Repete a frase-passe',
+  'settings.backup.warning':
+    'Se esqueceres esta frase-passe, o teu backup fica irrecuperável para sempre — nem nós conseguimos ajudar-te a recuperá-la.',
+  'settings.backup.backupNow': 'Fazer backup agora',
+  'settings.backup.restore': 'Restaurar neste dispositivo',
+  'settings.backup.lastBackup': 'Último backup: {{date}}',
+  'settings.backup.success': '✓ Feito.',
+  'settings.backup.wrongPassphrase': 'Frase-passe incorreta — não foi possível decifrar o backup.',
+  'settings.backup.noBackup': 'Ainda não há nenhum backup guardado.',
+  'settings.backup.error': 'Algo correu mal. Tenta novamente.',
   'calm.card.title': 'Um momento de calma',
   'calm.card.desc': 'Respiração guiada e exercícios de ancoragem — um minuto chega.',
   'calm.title': 'Momento de calma',
@@ -870,7 +982,7 @@ const pt: Dict = {
   'settings.toggle.sound.title': 'Efeitos de som',
   'settings.toggle.sound.desc': 'Reproduz carrilhões meditativos ao realizar ações.',
   'settings.privacy':
-    'Os teus estados de espírito, diário e rotinas ficam guardados apenas neste navegador — nunca saem do teu dispositivo. Só o texto que envias ativamente à IA é partilhado para gerar uma resposta.',
+    'Os teus estados de espírito, diário, rotinas e conversas ficam guardados e são processados só neste dispositivo — a IA corre localmente, nada do teu conteúdo chega a um servidor. Únicas exceções, e só se as ativares: o backup cifrado (nem o Aura consegue lê-lo sem a tua frase-passe) e o lembrete diário (que só envia a hora escolhida, nunca conteúdo).',
   'settings.danger.title': 'Apagar todos os meus dados',
   'settings.danger.desc': 'Apaga tudo neste dispositivo. Não pode ser desfeito.',
   'settings.danger.confirm': 'Apagar todos os teus dados do Aura neste dispositivo? Isto não pode ser desfeito.',
@@ -880,7 +992,8 @@ const pt: Dict = {
   'crisis.body':
     'O Aura é um companheiro, não um serviço de crise. Se puderes estar em perigo ou a pensar em magoar-te, por favor contacta alguém que te possa ajudar imediatamente — não precisas de carregar isto sozinho/a.',
   'crisis.call988': 'Liga ou envia mensagem para o 988 (EUA)',
-  'crisis.emergency': 'Emergência: 112',
+  'crisis.emergency': 'Emergência:',
+  'crisis.emergencyGeneric': 'Liga para o número de emergência do teu país',
   'crisis.findLine': 'Encontra uma linha perto de ti',
 
   'diary.title': 'Diário do dia',
@@ -906,6 +1019,13 @@ const de: Dict = {
   'nav.plan': 'Plan',
   'nav.settings': 'Einstellungen',
   'nav.calm': 'Ruhe',
+  'nav.insights': 'Verlauf',
+  'insights.title': 'Fortschritt & Verlauf',
+  'insights.subtitle': 'Sieh dir deine Stimmungsmuster an und lies nach, was du an jedem Tag geteilt hast.',
+  'insights.noRecords': 'Für diesen Tag gibt es keine Einträge.',
+  'insights.mood': 'Deine Stimmung',
+  'insights.diary': 'Tageszusammenfassung',
+  'insights.journal': 'Tagebucheinträge',
 
   'welcome.title': 'Willkommen bei Aura',
   'welcome.desc':
@@ -1013,6 +1133,8 @@ const de: Dict = {
   'settings.engine.ready': '✓ Bereit — Aura läuft vollständig auf diesem Gerät.',
   'settings.engine.errorPrefix': 'Lokales Modell konnte nicht geladen werden: ',
   'settings.engine.download': 'Modell herunterladen, um zu starten',
+  'download.meteredWarning':
+    'Du scheinst mobile Daten zu nutzen. Der Download ist ca. {{size}}GB groß und kann dein Datenvolumen verbrauchen. Trotzdem fortfahren?',
   'settings.packs.gpuRequired':
     'Dieser Browser unterstützt kein WebGPU, daher kann Aura hier keine KI-Antworten erzeugen — alles läuft auf dem Gerät, ohne Cloud. Probiere einen aktuellen Chrome oder Edge.',
   'settings.packs.title': 'Wähle deine Begleiterin',
@@ -1040,6 +1162,25 @@ const de: Dict = {
   'settings.account.subscribeError': 'E-Mail konnte nicht gespeichert werden. Bitte erneut versuchen.',
   'settings.account.privacyNote':
     'Deine E-Mail nutzen wir nur für Aura-Neuigkeiten. Deine Gespräche und dein Tagebuch verlassen nie dein Gerät.',
+  'settings.reminder.title': 'Tägliche Erinnerung',
+  'settings.reminder.desc':
+    'Ein Hinweis zur gewählten Uhrzeit. Enthält nie deinen Namen oder das, was du schreibst.',
+  'settings.reminder.unsupported': 'Dein Browser unterstützt keine Benachrichtigungen.',
+  'settings.backup.title': 'Verschlüsseltes Backup',
+  'settings.backup.desc':
+    'Bewahre eine verschlüsselte Kopie deines Tagebuchs und deiner Routinen auf, um sie auf einem anderen Gerät wiederherzustellen. Niemand, nicht einmal Aura, kann sie lesen.',
+  'settings.backup.reauth': 'Bitte bestätige deine Google-Anmeldung, um fortzufahren.',
+  'settings.backup.passphrasePlaceholder': 'Backup-Passphrase (mind. 8 Zeichen)',
+  'settings.backup.confirmPlaceholder': 'Passphrase wiederholen',
+  'settings.backup.warning':
+    'Wenn du diese Passphrase vergisst, ist dein Backup für immer unwiederbringlich — nicht einmal wir können dir helfen, es zurückzubekommen.',
+  'settings.backup.backupNow': 'Jetzt sichern',
+  'settings.backup.restore': 'Auf diesem Gerät wiederherstellen',
+  'settings.backup.lastBackup': 'Letztes Backup: {{date}}',
+  'settings.backup.success': '✓ Fertig.',
+  'settings.backup.wrongPassphrase': 'Falsche Passphrase — Backup konnte nicht entschlüsselt werden.',
+  'settings.backup.noBackup': 'Noch kein Backup gespeichert.',
+  'settings.backup.error': 'Etwas ist schiefgelaufen. Bitte erneut versuchen.',
   'calm.card.title': 'Ein Moment der Ruhe',
   'calm.card.desc': 'Geführte Atmung und Erdungsübungen — eine Minute genügt.',
   'calm.title': 'Moment der Ruhe',
@@ -1084,7 +1225,7 @@ const de: Dict = {
   'settings.toggle.sound.title': 'Soundeffekte',
   'settings.toggle.sound.desc': 'Spielt ruhige, meditative Töne bei Aktionen ab.',
   'settings.privacy':
-    'Deine Stimmungen, dein Tagebuch und deine Routinen werden nur in diesem Browser gespeichert — sie verlassen dein Gerät nie. Nur der Text, den du aktiv an die KI sendest, wird geteilt, um eine Antwort zu erzeugen.',
+    'Deine Stimmungen, dein Tagebuch, deine Routinen und deine Gespräche werden ausschließlich auf diesem Gerät gespeichert und verarbeitet — die KI läuft lokal, nichts von deinem Inhalt erreicht je einen Server. Einzige Ausnahmen, und nur wenn du sie aktivierst: das verschlüsselte Backup (nicht einmal Aura kann es ohne deine Passphrase lesen) und die tägliche Erinnerung (die nur die gewählte Uhrzeit sendet, nie Inhalte).',
   'settings.danger.title': 'Alle meine Daten löschen',
   'settings.danger.desc': 'Löscht alles auf diesem Gerät. Kann nicht rückgängig gemacht werden.',
   'settings.danger.confirm': 'Alle deine Aura-Daten auf diesem Gerät löschen? Das kann nicht rückgängig gemacht werden.',
@@ -1094,7 +1235,8 @@ const de: Dict = {
   'crisis.body':
     'Aura ist ein Begleiter, kein Krisendienst. Wenn du in Gefahr sein könntest oder daran denkst, dir selbst zu schaden, wende dich bitte sofort an jemanden, der dir helfen kann — du musst das nicht allein tragen.',
   'crisis.call988': 'Ruf 988 an oder schreib eine SMS (USA)',
-  'crisis.emergency': 'Notruf: 112',
+  'crisis.emergency': 'Notruf:',
+  'crisis.emergencyGeneric': 'Ruf die Notrufnummer deines Landes an',
   'crisis.findLine': 'Finde eine Hotline in deiner Nähe',
 
   'diary.title': 'Tages-Tagebuch',

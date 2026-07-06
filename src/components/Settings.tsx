@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   AlertTriangle,
+  Bell,
   Check,
   Download,
   Globe,
@@ -16,7 +17,13 @@ import {
 import { clearAllData, exportAllData, useSettings, useModelIdForPack, type Settings as SettingsType } from '../lib/settings'
 import { speechSupported } from '../lib/speech'
 import { useName } from '../lib/store'
-import { emailCaptureAvailable, googleSignInAvailable, subscribeEmail, useProfile } from '../lib/auth'
+import {
+  emailCaptureAvailable,
+  getLatestIdToken,
+  googleSignInAvailable,
+  subscribeEmail,
+  useProfile,
+} from '../lib/auth'
 import GoogleSignInButton from './GoogleSignInButton'
 import { LANG_LABELS, SUPPORTED_LANGS, useLang } from '../lib/i18n'
 import { CHARACTER_PACKS, DEFAULT_PACK_ID, SUPPORTED_MODELS, type CharacterPack } from '../lib/characterPacks'
@@ -28,6 +35,9 @@ import {
   webgpuSupported,
 } from '../lib/localEngine'
 import { playTapChime } from '../lib/chime'
+import { isLikelyMeteredConnection } from '../lib/network'
+import { isPushSupported, subscribeToReminders, unsubscribeFromReminders } from '../lib/push'
+import { backupNow, deleteBackup, restoreBackup } from '../lib/backup'
 
 const PACK_LIST = Object.values(CHARACTER_PACKS)
 
@@ -207,6 +217,172 @@ function AccountCard() {
   )
 }
 
+function ReminderCard() {
+  const { t, lang } = useLang()
+  const [settings, setSettings] = useSettings()
+  const [busy, setBusy] = useState(false)
+  const supported = isPushSupported()
+
+  async function toggle(on: boolean) {
+    setBusy(true)
+    if (on) {
+      const ok = await subscribeToReminders(settings.reminderHour, settings.reminderMinute, lang)
+      setSettings((s) => ({ ...s, reminderEnabled: ok }))
+    } else {
+      await unsubscribeFromReminders()
+      setSettings((s) => ({ ...s, reminderEnabled: false }))
+    }
+    setBusy(false)
+  }
+
+  async function updateTime(hour: number, minute: number) {
+    setSettings((s) => ({ ...s, reminderHour: hour, reminderMinute: minute }))
+    if (settings.reminderEnabled) await subscribeToReminders(hour, minute, lang)
+  }
+
+  return (
+    <div className="card mt-4 p-5">
+      <div className="flex items-center gap-4">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sage/15 text-sagedeep">
+          <Bell size={18} />
+        </div>
+        <div className="flex-1">
+          <p className="font-medium text-ink">{t('settings.reminder.title')}</p>
+          <p className="text-sm text-muted">
+            {supported ? t('settings.reminder.desc') : t('settings.reminder.unsupported')}
+          </p>
+        </div>
+        <Toggle on={settings.reminderEnabled} disabled={!supported || busy} onChange={toggle} />
+      </div>
+      {settings.reminderEnabled && (
+        <div className="mt-3 flex items-center gap-2">
+          <input
+            type="time"
+            value={`${String(settings.reminderHour).padStart(2, '0')}:${String(settings.reminderMinute).padStart(2, '0')}`}
+            onChange={(e) => {
+              const [h, m] = e.target.value.split(':').map(Number)
+              updateTime(h, m)
+            }}
+            className="rounded-xl border border-ink/10 bg-white/60 px-3 py-2 text-sm text-ink outline-none focus:border-sage/50"
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+
+type BackupStatus = 'idle' | 'working' | 'ok' | 'wrong-passphrase' | 'no-backup' | 'error'
+
+function BackupCard() {
+  const { t } = useLang()
+  const { profile } = useProfile()
+  const [settings, setSettings] = useSettings()
+  const [passphrase, setPassphrase] = useState('')
+  const [confirmPass, setConfirmPass] = useState('')
+  const [status, setStatus] = useState<BackupStatus>('idle')
+  const [pendingAction, setPendingAction] = useState<null | 'backup' | 'restore'>(null)
+  const [needsReauth, setNeedsReauth] = useState(false)
+
+  const hasBackup = !!settings.backupUpdatedAt
+  const passReady = hasBackup ? passphrase.length >= 8 : passphrase.length >= 8 && passphrase === confirmPass
+
+  if (!googleSignInAvailable() || !profile) return null
+
+  async function run(action: 'backup' | 'restore') {
+    const token = getLatestIdToken()
+    if (!token) {
+      setPendingAction(action)
+      setNeedsReauth(true)
+      return
+    }
+    setStatus('working')
+    try {
+      if (action === 'backup') {
+        await backupNow(token, passphrase)
+        setSettings((s) => ({ ...s, backupUpdatedAt: new Date().toISOString() }))
+      } else {
+        await restoreBackup(token, passphrase)
+      }
+      setStatus('ok')
+      setPassphrase('')
+      setConfirmPass('')
+    } catch (err: any) {
+      if (err?.message === 'wrong-passphrase') setStatus('wrong-passphrase')
+      else if (err?.message === 'no-backup') setStatus('no-backup')
+      else setStatus('error')
+    }
+  }
+
+  return (
+    <div className="card mt-4 p-5">
+      <p className="font-medium text-ink">{t('settings.backup.title')}</p>
+      <p className="mb-3 text-sm text-muted">{t('settings.backup.desc')}</p>
+
+      {needsReauth && (
+        <div className="mb-3 rounded-2xl bg-sage/10 p-3">
+          <p className="mb-2 text-xs text-ink/80">{t('settings.backup.reauth')}</p>
+          <GoogleSignInButton
+            forceRender
+            onSignedIn={() => {
+              setNeedsReauth(false)
+              if (pendingAction) run(pendingAction)
+            }}
+          />
+        </div>
+      )}
+
+      <input
+        type="password"
+        value={passphrase}
+        onChange={(e) => setPassphrase(e.target.value)}
+        placeholder={t('settings.backup.passphrasePlaceholder')}
+        className="w-full rounded-2xl border border-ink/10 bg-white/60 px-4 py-3 text-sm text-ink outline-none transition focus:border-sage/50"
+      />
+      {!hasBackup && (
+        <input
+          type="password"
+          value={confirmPass}
+          onChange={(e) => setConfirmPass(e.target.value)}
+          placeholder={t('settings.backup.confirmPlaceholder')}
+          className="mt-2 w-full rounded-2xl border border-ink/10 bg-white/60 px-4 py-3 text-sm text-ink outline-none transition focus:border-sage/50"
+        />
+      )}
+      <p className="mt-2 text-[11px] leading-relaxed text-muted/80">{t('settings.backup.warning')}</p>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          disabled={!passReady || status === 'working'}
+          onClick={() => run('backup')}
+          className="rounded-full bg-sage px-4 py-2 text-xs font-medium text-white transition hover:opacity-90 disabled:opacity-40"
+        >
+          {t('settings.backup.backupNow')}
+        </button>
+        {hasBackup && (
+          <button
+            disabled={passphrase.length < 8 || status === 'working'}
+            onClick={() => run('restore')}
+            className="rounded-full border border-sage/40 px-4 py-2 text-xs font-medium text-sagedeep transition hover:bg-sage/10 disabled:opacity-40"
+          >
+            {t('settings.backup.restore')}
+          </button>
+        )}
+      </div>
+
+      {hasBackup && (
+        <p className="mt-2 text-xs text-muted">
+          {t('settings.backup.lastBackup', { date: new Date(settings.backupUpdatedAt!).toLocaleString() })}
+        </p>
+      )}
+      {status === 'ok' && <p className="mt-2 text-xs text-sagedeep">{t('settings.backup.success')}</p>}
+      {status === 'wrong-passphrase' && (
+        <p className="mt-2 text-xs text-clay">{t('settings.backup.wrongPassphrase')}</p>
+      )}
+      {status === 'no-backup' && <p className="mt-2 text-xs text-clay">{t('settings.backup.noBackup')}</p>}
+      {status === 'error' && <p className="mt-2 text-xs text-clay">{t('settings.backup.error')}</p>}
+    </div>
+  )
+}
+
 export default function Settings() {
   const [settings, setSettings] = useSettings()
   const [name, setName] = useName()
@@ -263,6 +439,11 @@ export default function Settings() {
   }
 
   function handleDownload() {
+    if (isLikelyMeteredConnection()) {
+      const modelInfo = SUPPORTED_MODELS.find((m) => m.id === activeModelId)
+      const ok = confirm(t('download.meteredWarning', { size: modelInfo?.vramGB ?? activePack.vramHintGB }))
+      if (!ok) return
+    }
     switchActiveLocalModel(activeModelId, previousLoadedModelId).catch(() => {})
   }
 
@@ -506,8 +687,14 @@ export default function Settings() {
         </Row>
       </div>
 
+      {/* Daily reminder push notification */}
+      <ReminderCard />
+
       {/* Account (only renders when Google Sign-In / email updates are configured) */}
       <AccountCard />
+
+      {/* Encrypted cross-device backup (only renders when signed in with Google) */}
+      <BackupCard />
 
       {/* Privacy */}
       <div className="card mt-4 flex items-start gap-3 p-5">
@@ -536,10 +723,12 @@ export default function Settings() {
           <p className="text-sm text-muted">{t('settings.danger.desc')}</p>
         </div>
         <button
-          onClick={() => {
-            if (confirm(t('settings.danger.confirm'))) {
-              clearAllData()
-            }
+          onClick={async () => {
+            if (!confirm(t('settings.danger.confirm'))) return
+            await unsubscribeFromReminders().catch(() => {})
+            const token = getLatestIdToken()
+            if (token) await deleteBackup(token).catch(() => {})
+            clearAllData()
           }}
           className="inline-flex items-center gap-2 rounded-full border border-clay/40 px-4 py-2 text-sm font-medium text-clay transition hover:bg-clay/10"
         >

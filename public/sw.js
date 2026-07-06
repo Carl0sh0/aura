@@ -47,3 +47,34 @@ self.addEventListener('fetch', (event) => {
     ),
   )
 })
+
+// Daily-reminder push: the payload is always the small generic { title, body }
+// object sent by api/push/send-reminders.ts — never anything from the user's
+// journal/chat, since the server that sends this never has access to it.
+self.addEventListener('push', (event) => {
+  let data = { title: 'Aura', body: '' }
+  try {
+    if (event.data) data = { ...data, ...event.data.json() }
+  } catch {
+    // best-effort; fall back to the generic title/body above
+  }
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: '/icon-192.png',
+      badge: '/icon-192.png',
+      tag: 'aura-daily-reminder',
+    }),
+  )
+})
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      const existing = clients.find((c) => 'focus' in c)
+      if (existing) return existing.focus()
+      return self.clients.openWindow('/')
+    }),
+  )
+})
